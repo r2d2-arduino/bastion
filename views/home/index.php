@@ -7,18 +7,19 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\HomeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 use app\models\User;
-use app\models\HomePosition;
+use app\models\Position;
+use yii\helpers\Url;
 
 $this->title = Yii::t('app', 'Homes');
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="home-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
+    <div style="float: right; margin-top: -40px;">
         <?= Html::a(Yii::t('app', 'Create Home'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    </div>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,22 +31,23 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'user_id',
+            
             'name',
+            /*'user_id',
             [
                 'label' => 'User',
                 'value' => function ($data)
                 {
-                    $model = User::find(['id' => $data->user_id])->one();
+                    $model = User::findOne(['id' => $data->user_id]);
                     return $model->username;
                 },
-            ],
+            ],*/
             [
                 'label' => 'Positions',
                 'value' => function ($data)
                 {
-                    $cnt = HomePosition::find()->where(['home_id' => $data->id])->count();
-                    return "<a href='/bastion/web/index.php?r=home-position&HomePositionSearch%5Bhome_id%5D=".$data->id."'>".$cnt."</a>";
+                    $cnt = Position::find()->where(['home_id' => $data->id])->count();
+                    return "<a aria-label='view' data-pjax='0' href='".Url::base()."?r=position&home_id=".$data->id."'>".$cnt."</a>";
                 },
                 'format' => 'raw'
             ],            

@@ -33,10 +33,10 @@ class PositionController extends Controller
      * Lists all Position models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($home_id = null)
     {
         $searchModel = new PositionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $home_id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -69,7 +69,7 @@ class PositionController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
+        
         return $this->render('create', [
             'model' => $model,
         ]);

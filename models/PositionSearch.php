@@ -38,7 +38,7 @@ class PositionSearch extends Position
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $home_id)
     {
         $query = Position::find();
 
@@ -59,8 +59,9 @@ class PositionSearch extends Position
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'home_id' => $home_id,//$this->home_id,
         ]);
-
+        
         $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;

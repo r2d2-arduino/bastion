@@ -38,7 +38,7 @@ class HomeSearch extends Home
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $user_id)
     {
         $query = Home::find();
 
@@ -59,7 +59,7 @@ class HomeSearch extends Home
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'user_id' => $user_id,//$this->user_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

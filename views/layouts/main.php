@@ -36,7 +36,7 @@ AppAsset::register($this);
             ]);
             
             $items = [
-                ['label' => 'Main', 'url' => ['/site/index']],
+               // ['label' => 'Main', 'url' => ['/site/index']],
                 ['label' => 'About', 'url' => ['/site/about']],
                 ['label' => 'Contact', 'url' => ['/site/contact']],
                 ['label' => 'Login', 'url' => ['/site/login']],
@@ -44,14 +44,14 @@ AppAsset::register($this);
             if (!Yii::$app->user->isGuest)
             {
                 $items = [
-                    ['label' => 'Main', 'url' => ['/site/index']],
-                    ['label' => 'User', 'url' => ['/user/index']],
-                    ['label' => 'Home', 'url' => ['/home/index']],
-                    ['label' => 'Position', 'url' => ['/position/index']],
-                    ['label' => 'Connection', 'url' => ['/connection/index']],
-                    ['label' => 'Device', 'url' => ['/device/index']],
-                    ['label' => 'Sensor', 'url' => ['/sensor/index']],
-                    ['label' => 'Value', 'url' => ['/sensor-value/index']],
+                   // ['label' => 'Main', 'url' => ['/site/index']],
+                    //['label' => 'User', 'url' => ['/user/index']],
+                    ['label' => 'Homes', 'url' => ['/home/index']],
+                    ['label' => 'Positions', 'url' => ['/position/index']],
+                    ['label' => 'Connections', 'url' => ['/connection/index']],
+                    ['label' => 'Devices', 'url' => ['/device/index']],
+                    ['label' => 'Sensors', 'url' => ['/sensor/index']],
+                    ['label' => 'Values', 'url' => ['/sensor-value/index']],
                     '<li>'. Html::beginForm(['/site/logout'], 'post')
                     . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')',
                             ['class' => 'btn btn-link logout'])
