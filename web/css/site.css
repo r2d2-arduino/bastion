@@ -113,3 +113,30 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.btn-add-block {
+    float: right; 
+    margin-top: -40px;
+}
+
+.search-block .form-group, .form-block .form-group {
+    width: 275px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.search-block .form-group button, .form-block .form-group button {
+    margin-top: 24px;
+    margin-left: 10px;
+}
+
+.grid-view .summary
+{
+    width: 200px;
+}
+
+.pagination
+{
+    float: right;
+}

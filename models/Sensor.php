@@ -20,6 +20,7 @@ use Yii;
  */
 class Sensor extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -34,11 +35,14 @@ class Sensor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['user_id'], 'required'],
+            [['user_id'], 'integer'],
             [['created'], 'safe'],
             [['name', 'shortname'], 'required'],
             [['min_rate', 'max_rate'], 'number'],
             [['name'], 'string', 'max' => 16],
             [['shortname', 'unit'], 'string', 'max' => 8],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -49,6 +53,7 @@ class Sensor extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'user_id' => Yii::t('app', 'User'),
             'created' => Yii::t('app', 'Created'),
             'name' => Yii::t('app', 'Name'),
             'shortname' => Yii::t('app', 'Shortname'),
@@ -77,4 +82,10 @@ class Sensor extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SensorValue::className(), ['sensor_id' => 'id']);
     }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
 }

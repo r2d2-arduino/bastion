@@ -17,7 +17,7 @@ class SensorSearch extends Sensor
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'user_id'], 'integer'],
             [['created', 'name', 'shortname', 'unit'], 'safe'],
             [['min_rate', 'max_rate'], 'number'],
         ];
@@ -39,7 +39,7 @@ class SensorSearch extends Sensor
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $user_id)
     {
         $query = Sensor::find();
 
@@ -60,6 +60,7 @@ class SensorSearch extends Sensor
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'user_id' => $user_id,            
             'created' => $this->created,
             'min_rate' => $this->min_rate,
             'max_rate' => $this->max_rate,

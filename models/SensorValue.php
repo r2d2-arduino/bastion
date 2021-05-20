@@ -49,8 +49,8 @@ class SensorValue extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'created' => Yii::t('app', 'Created'),
-            'sensor_id' => Yii::t('app', 'Sensor ID'),
-            'device_id' => Yii::t('app', 'Device ID'),
+            'sensor_id' => Yii::t('app', 'Sensor'),
+            'device_id' => Yii::t('app', 'Device'),
             'value' => Yii::t('app', 'Value'),
         ];
     }

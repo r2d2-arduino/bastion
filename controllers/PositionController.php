@@ -33,10 +33,10 @@ class PositionController extends Controller
      * Lists all Position models.
      * @return mixed
      */
-    public function actionIndex($home_id = null)
+    public function actionIndex()
     {
         $searchModel = new PositionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $home_id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->user->id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -66,8 +66,14 @@ class PositionController extends Controller
     {
         $model = new Position();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) ) 
+        {
+            $model->user_id = Yii::$app->user->id;
+            
+            if ($model->save()) 
+            {
+                return $this->redirect(['index']);
+            }
         }
         
         return $this->render('create', [
@@ -87,7 +93,8 @@ class PositionController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

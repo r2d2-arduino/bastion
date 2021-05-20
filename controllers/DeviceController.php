@@ -36,7 +36,7 @@ class DeviceController extends Controller
     public function actionIndex()
     {
         $searchModel = new DeviceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->user->id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -66,8 +66,14 @@ class DeviceController extends Controller
     {
         $model = new Device();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) ) 
+        {
+            $model->user_id = Yii::$app->user->id;
+            
+            if ($model->save()) 
+            {
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [

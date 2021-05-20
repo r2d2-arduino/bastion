@@ -17,7 +17,7 @@ class DeviceSearch extends Device
     public function rules()
     {
         return [
-            [['id', 'position_id', 'connection_id'], 'integer'],
+            [['id', 'user_id', 'position_id', 'connection_id'], 'integer'],
             [['name', 'channel'], 'safe'],
         ];
     }
@@ -38,7 +38,7 @@ class DeviceSearch extends Device
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $user_id)
     {
         $query = Device::find();
 
@@ -59,6 +59,7 @@ class DeviceSearch extends Device
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'user_id' => $user_id,            
             'position_id' => $this->position_id,
             'connection_id' => $this->connection_id,
         ]);

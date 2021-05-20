@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="connection-form">
+<div class="connection-form form-block">
 
     <?php $form = ActiveForm::begin(); ?>
 

@@ -29,10 +29,13 @@ class Position extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['home_id'], 'required'],
+            [['home_id'], 'integer'], 
             [['user_id'], 'required'],
             [['user_id'], 'integer'],            
             [['name'], 'required'],
             [['name'], 'string', 'max' => 8],
+            [['home_id'], 'exist', 'skipOnError' => true, 'targetClass' => Home::className(), 'targetAttribute' => ['home_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -44,7 +47,8 @@ class Position extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
+            'user_id' => Yii::t('app', 'User'),
+            'home_id' => Yii::t('app', 'Home'),
             'name' => Yii::t('app', 'Name'),
         ];
     }
@@ -59,6 +63,11 @@ class Position extends \yii\db\ActiveRecord
         return $this->hasMany(Device::className(), ['position_id' => 'id']);
     }
 
+    public function getHome()
+    {
+        return $this->hasOne(User::className(), ['id' => 'home_id']);
+    }
+    
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);

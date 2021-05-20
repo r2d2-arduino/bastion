@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="sensor-value-form">
+<div class="sensor-value-form form-block">
 
     <?php $form = ActiveForm::begin(); ?>
 

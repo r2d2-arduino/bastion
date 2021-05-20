@@ -35,12 +35,15 @@ class Device extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['user_id'], 'required'],
+            [['user_id'], 'integer'],            
             [['name', 'position_id'], 'required'],
             [['position_id', 'connection_id'], 'integer'],
             [['channel'], 'string'],
             [['name'], 'string', 'max' => 32],
             [['connection_id'], 'exist', 'skipOnError' => true, 'targetClass' => Connection::className(), 'targetAttribute' => ['connection_id' => 'id']],
             [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => Position::className(), 'targetAttribute' => ['position_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -51,10 +54,11 @@ class Device extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'user_id' => Yii::t('app', 'User'),
             'name' => Yii::t('app', 'Name'),
-            'position_id' => Yii::t('app', 'Position ID'),
+            'position_id' => Yii::t('app', 'Position'),
             'channel' => Yii::t('app', 'Channel'),
-            'connection_id' => Yii::t('app', 'Connection ID'),
+            'connection_id' => Yii::t('app', 'Connection'),
         ];
     }
 
@@ -78,6 +82,11 @@ class Device extends \yii\db\ActiveRecord
         return $this->hasOne(Position::className(), ['id' => 'position_id']);
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+    
     /**
      * Gets query for [[DeviceControllers]].
      *

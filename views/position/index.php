@@ -15,19 +15,17 @@ $this->title = Yii::t('app', 'Positions');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <div style="float: right; margin-top: -40px;">
+    <div  class="btn-add-block" >
         <?= Html::a(Yii::t('app', 'Create Position'), ['create'], ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'name',
             //'home_id',

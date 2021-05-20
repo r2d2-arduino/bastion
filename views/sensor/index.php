@@ -8,15 +8,15 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Sensors');
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sensor-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
+    <div  class="btn-add-block" >
         <?= Html::a(Yii::t('app', 'Create Sensor'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    </div>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
