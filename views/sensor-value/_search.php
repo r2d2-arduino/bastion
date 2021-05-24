@@ -9,8 +9,8 @@ use yii\widgets\ActiveForm;
 use app\models\Sensor;
 use app\models\Device;
 
-//$sensors = Sensor::findAll(['user_id' => Yii::$app->user->id]);
-$sensors = Sensor::find()->all();
+$sensors = Sensor::findAll(['user_id' => Yii::$app->user->id]);
+//$sensors = Sensor::find()->all();
 
 $sensorList = [];
 foreach ($sensors as $sensor)
@@ -18,14 +18,17 @@ foreach ($sensors as $sensor)
     $sensorList[$sensor->id] = $sensor->name;
 }
 
-//$devices = Device::findAll(['user_id' => Yii::$app->user->id]);
-$devices = Device::find()->all();
+$devices = Device::findAll(['user_id' => Yii::$app->user->id]);
+//$devices = Device::find()->all();
 
 $deviceList = [];
 foreach ($devices as $device)
 {
     $deviceList[$device->id] = $device->name;
 }
+
+
+
 ?>
 
 <div class="sensor-value-search search-block">

@@ -38,3 +38,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+
+<?= $this->render('//layouts/_speedometer', ['model' => $model]) ?>

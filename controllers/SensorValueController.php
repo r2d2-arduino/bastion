@@ -9,6 +9,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+//Model::find()->where(['in', 'id', [1,2]])->all();
+//Table::find()->where('id > :id', [':id' => '2']])->all();
+//Table::find()->where([’>’, ‘id’, ‘2’])->all();
+
 /**
  * SensorValueController implements the CRUD actions for SensorValue model.
  */
