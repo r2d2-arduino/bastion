@@ -35,7 +35,11 @@ $this->title = Yii::t('app', 'Sensors');
             //'min_rate',
             //'max_rate',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttonOptions' => ['class' => 'btn btn-default'],
+                'contentOptions' => ['style' => 'width: 150px'],
+            ],
         ],
     ]); ?>
 

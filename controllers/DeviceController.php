@@ -8,7 +8,7 @@ use app\models\DeviceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\models\DeviceSensor;
 /**
  * DeviceController implements the CRUD actions for Device model.
  */
@@ -65,7 +65,7 @@ class DeviceController extends Controller
     public function actionCreate()
     {
         $model = new Device();
-
+        
         if ($model->load(Yii::$app->request->post()) ) 
         {
             $model->user_id = Yii::$app->user->id;
@@ -92,9 +92,28 @@ class DeviceController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post(); 
+        
+        $sensors = isset($post['Sensor']) ? $post['Sensor'] : [];        
+        unset($post['Sensor']);
+        
+        if ($model->load($post) ) 
+        {
+            $model->user_id = Yii::$app->user->id;
+            
+            if ($model->save()) 
+            {
+                DeviceSensor::deleteAll(['device_id' => $model->id]);
+                foreach ($sensors as $sensor_id)
+                {
+                    DeviceSensor::add($model->id, $sensor_id);
+                }
+                return $this->redirect(['index']);
+            }
         }
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }*/
 
         return $this->render('update', [
             'model' => $model,

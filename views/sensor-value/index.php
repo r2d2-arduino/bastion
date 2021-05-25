@@ -51,7 +51,11 @@ $this->title = Yii::t('app', 'Sensor Values');
                 },
             ],
             'value',
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttonOptions' => ['class' => 'btn btn-default'],
+                'contentOptions' => ['style' => 'width: 150px'],
+            ],
         ],
     ]);
     ?>

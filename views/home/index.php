@@ -29,29 +29,23 @@ $this->title = Yii::t('app', 'Homes');
         //'filterModel' => $searchModel,
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'name',
-            /* 'user_id',
-              [
-              'label' => 'User',
-              'value' => function ($data)
-              {
-              $model = User::findOne(['id' => $data->user_id]);
-              return $model->username;
-              },
-              ], */
             [
                 'label' => 'Positions',
                 'value' => function ($data)
                 {
                     $cnt = Position::find()->where(['home_id' => $data->id])->count();
-                    return "<a aria-label='view' data-pjax='0' href='" . Url::base() .
-                            "/index.php?r=position%2Findex&PositionSearch%5Bname%5D=&PositionSearch%5Bhome_id%5D=" . $data->id . "'>" . $cnt . "</a>";
+                    return $cnt ? "<a aria-label='view' data-pjax='0' href='" . Url::base() .
+                            "/index.php?r=position%2Findex&PositionSearch%5Bname%5D=&PositionSearch%5Bhome_id%5D=" . $data->id . "'>" . $cnt . "</a>":"-";
                 },
                 'format' => 'raw'
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttonOptions' => ['class' => 'btn btn-default'],
+                'contentOptions' => ['style' => 'width: 150px'],
+            ],
         ],
     ]);
     ?>

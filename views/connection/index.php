@@ -30,7 +30,11 @@ $this->title = Yii::t('app', 'Connections');
             'id',
             'name',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttonOptions' => ['class' => 'btn btn-default'],
+                'contentOptions' => ['style' => 'width: 150px'],
+            ],
         ],
     ]); ?>
 

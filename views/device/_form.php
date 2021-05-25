@@ -5,9 +5,21 @@ use yii\widgets\ActiveForm;
 use app\models\Position;
 use app\models\Connection;
 
+use app\models\DeviceSensor;
+use app\models\Sensor;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Device */
 /* @var $form yii\widgets\ActiveForm */
+
+$devSensors = isset($model->id) ? DeviceSensor::find()->where(['device_id' => $model->id])->all() : [];
+$devSenIds = [];
+foreach ($devSensors as $devsen)
+{
+    $devSenIds[] = $devsen->sensor_id;
+}
+
+$sensors = Sensor::findAll(['user_id' => Yii::$app->user->id]);
 
 $positions = Position::findAll(['user_id' => Yii::$app->user->id]);
 
@@ -40,6 +52,14 @@ $channelList = ['RECEIVER' => 'RECEIVER', 'TRANSMITTER' => 'TRANSMITTER', 'DUAL'
 
     <?= $form->field($model, 'connection_id')->dropDownList($connList, ['prompt' => 'Выберите соединение...']); ?>
 
+    <div class="form-group field-device-name">
+        <h4>Sensors:</h4>
+        <?php foreach ($sensors as $sensor):  ?>
+        <input type="checkbox" id="sensor_<?=$sensor->id?>" name="Sensor[sensor_<?=$sensor->id?>]" value="<?=$sensor->id?>" <?=in_array($sensor->id, $devSenIds) ? 'checked' : ''?> />
+        <label class="control-label" for="sensor_<?=$sensor->id?>"><?=$sensor->name?></label><br/>
+        <?php endforeach; ?>
+    </div>    
+    
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>

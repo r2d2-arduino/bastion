@@ -19,12 +19,12 @@ $sensors = Sensor::find()->where(['user_id' => Yii::$app->user->id])->all();
     <div class="body-content">
         <div class="row">
             <?php foreach ($sensors as $sensor): ?>
-            <div class="col-lg-3" style="">
+            <div class="col-md-3 text-center" >
                 <?php
                 $sensorValId = SensorValue::find()->where(['sensor_id' => $sensor->id])->max('id');
                 $sensorValue  = SensorValue::find()->where(['id' => $sensorValId])->one();
                 ?>
-                <?= $this->render('//layouts/_speedometer', ['model' => $sensorValue]) ?>
+                <?= $this->render('//layouts/_speedometer', ['model' => $sensorValue, 'sensor' => $sensor]) ?>
             </div>
             <?php endforeach; ?>
         </div>
@@ -32,6 +32,6 @@ $sensors = Sensor::find()->where(['user_id' => Yii::$app->user->id])->all();
 </div>
 <script>
 setTimeout(function(){ 
-    window.location.reload(); 
+    //window.location.reload(); 
 }, 5000);
 </script>

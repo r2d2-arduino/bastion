@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 use app\models\Position;
 use app\models\Connection;
-
+use app\models\DeviceSensor;
 
 $this->title = Yii::t('app', 'Devices');
 //$this->params['breadcrumbs'][] = $this->title;
@@ -30,11 +30,8 @@ $this->title = Yii::t('app', 'Devices');
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'name',
-            //'position_id',
             [
                 'label' => 'Position',
                 'value' => function ($data)
@@ -44,7 +41,6 @@ $this->title = Yii::t('app', 'Devices');
                 },
             ],
             'channel',
-            //'connection_id',
             [
                 'label' => 'Connection',
                 'value' => function ($data)
@@ -53,7 +49,19 @@ $this->title = Yii::t('app', 'Devices');
                     return $model->name;
                 },
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'label' => 'Sensors',
+                'value' => function ($data)
+                {
+                    $cnt = DeviceSensor::find()->where(['device_id' => $data->id])->count();
+                    return $cnt;
+                },
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttonOptions' => ['class' => 'btn btn-default'],
+                'contentOptions' => ['style' => 'width: 150px'],
+            ],
         ],
     ]);
     ?>

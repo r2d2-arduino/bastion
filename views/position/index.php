@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\Home;
+use app\models\Device;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PositionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -28,7 +30,6 @@ $this->title = Yii::t('app', 'Positions');
         'columns' => [
             'id',
             'name',
-            //'home_id',
             [
                 'label' => 'Home',
                 'value' => function ($data)
@@ -37,7 +38,21 @@ $this->title = Yii::t('app', 'Positions');
                     return $model->name;
                 },
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'label' => 'Devices',
+                'value' => function ($data)
+                {
+                    $cnt = Device::find()->where(['position_id' => $data->id])->count();
+                    return $cnt ? "<a aria-label='view' data-pjax='0' href='" . Url::base() .
+                            "/index.php?r=device%2Findex&DeviceSearch%5Bname%5D=&DeviceSearch%5Bposition_id%5D=" . $data->id . "'>" . $cnt . "</a>" : "-";
+                },
+                'format' => 'raw'
+            ],                        
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttonOptions' => ['class' => 'btn btn-default'],
+                'contentOptions' => ['style' => 'width: 150px'],
+            ],
         ],
     ]); ?>
 

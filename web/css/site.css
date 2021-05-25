@@ -129,14 +129,19 @@ a.desc:after {
 .search-block .form-group button, .form-block .form-group button {
     margin-top: 24px;
     margin-left: 10px;
+    min-width: 100px;
 }
 
 .grid-view .summary
 {
-    width: 200px;
+    width: 300px;
 }
 
 .pagination
 {
     float: right;
+}
+
+.grid-view table a[aria-label=View], .grid-view table a[aria-label=Update], .grid-view table a[aria-label=Delete]{
+    _padding: 5px;
 }

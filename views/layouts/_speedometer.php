@@ -1,7 +1,7 @@
 <?php
 use app\models\Sensor;
 
-$sensor = Sensor::findOne(['user_id' => Yii::$app->user->id, 'id' => $model->sensor_id]);
+$sensor = isset($sensor) ? $sensor : Sensor::findOne(['user_id' => Yii::$app->user->id, 'id' => $model->sensor_id]);
 
 $value = $model->value > 100 ? round($model->value) : $model->value;
 
