@@ -74,4 +74,17 @@ class SensorValue extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Sensor::className(), ['id' => 'sensor_id']);
     }
+    
+    public static function add($device_id, $sensor_id, $value)
+    {
+        $model = new SensorValue();
+            
+        $model->device_id = $device_id;
+        $model->sensor_id = $sensor_id;
+        $model->value     = $value;
+
+        $model->save();
+        
+        return $model->id;
+    }
 }
