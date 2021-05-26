@@ -113,7 +113,39 @@ class SensorValueController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
+    public function actionActual()
+    {
+        $sensor_id = Yii::$app->request->post('sensor_id', 0);
+        $device_id = Yii::$app->request->post('device_id', 0);
+        
+        if ($sensor_id)
+        {
+            $maxIds[] = SensorValue::find()->where(['sensor_id' => $sensor_id])->max();
+        }
+        {
+            $maxIds = SensorValue::find()->select(['MAX(id) as id'])->groupBy(['sensor_id'])->column();
+        }
+        
+        $sensors = [];
+        
+        if ($maxIds)
+        {
+            foreach ($maxIds as $sid)
+            {
+                $sensors[] = SensorValue::find()->select(['sensor_id', 'value'])->where(['id' => (int) $sid])->one();
+            }
+        }
+        
+        echo \yii\helpers\Json::encode($sensors);
+    }
+
+    
+    public function actionTest()
+    {
+        echo 'test1';
+    }
+    
+     /**
      * Finds the SensorValue model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
@@ -128,4 +160,6 @@ class SensorValueController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+    
+    
 }

@@ -11,6 +11,8 @@ use app\models\Device;
 
 $this->title = Yii::t('app', 'Sensor Values');
 //$this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="sensor-value-index">
 
@@ -28,17 +30,13 @@ $this->title = Yii::t('app', 'Sensor Values');
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'created',
-            //'sensor_id',
-            //'device_id',
             [
                 'label' => 'Sensor',
                 'value' => function ($data)
                 {
-                    $model = Sensor::findOne(['id' => $data->sensor_id]);
+                    $model = Sensor::find()->select(['name'])->where(['id' => $data->sensor_id])->one();
                     return $model->name;
                 },
             ],
@@ -46,7 +44,7 @@ $this->title = Yii::t('app', 'Sensor Values');
                 'label' => 'Device',
                 'value' => function ($data)
                 {
-                    $model = Device::findOne(['id' => $data->device_id]);
+                    $model = Device::find()->select(['name'])->where(['id' => $data->device_id])->one();
                     return $model->name;
                 },
             ],

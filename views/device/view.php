@@ -6,6 +6,7 @@ use app\models\DeviceSensor;
 use app\models\Sensor;
 use app\models\SensorValue;
 
+$this->registerJsFile('@web/js/speedometer.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 /* @var $this yii\web\View */
 /* @var $model app\models\Device */
 
@@ -49,15 +50,18 @@ foreach ($devSensors as $devsen)
 
 </div>
 <div class="body-content">
-        <div class="row">
-            <?php foreach ($sensors as $sensor): ?>
-            <div class="col-md-3 text-center" >
-                <?php
-                $sensorValId = SensorValue::find()->where(['sensor_id' => $sensor->id])->max('id');
-                $sensorValue  = SensorValue::find()->where(['id' => $sensorValId])->one();
-                ?>
-                <?= $this->render('//layouts/_speedometer', ['model' => $sensorValue, 'sensor' => $sensor]) ?>
-            </div>
-            <?php endforeach; ?>
-        </div>
+    <div class="row">
+        <?php foreach ($sensors as $sensor): ?>
+            <?php
+            $sensorValId = SensorValue::find()->where(['sensor_id' => $sensor->id])->max('id');
+            $sensorValue  = SensorValue::find()->where(['id' => $sensorValId])->one();
+            ?>
+            <?= $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]) ?>
+        <?php endforeach; ?>
     </div>
+</div>
+<script>
+setTimeout(function(){ 
+    getLastSensorsValue();
+}, 20000);
+</script>
