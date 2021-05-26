@@ -47,7 +47,23 @@ foreach ($devices as $device)
 
     <?= $form->field($model, 'sensor_id')->dropDownList($sensorList, ['prompt' => 'Выберите сенсор...']); ?>
     <?= $form->field($model, 'device_id')->dropDownList($deviceList, ['prompt' => 'Выберите устройство...']); ?>
+    
+    
 
+    
+    <!-- div class="form-group field-sensorvaluesearch-value">
+        <label class="control-label" for="sensorvaluesearch-value" style="display: block">Value</label>
+        <select name="SensorValueSearch[bigless]" class="form-control" style="width: 60px; float: left; margin-right: 8px" >
+            <option value="=" selected>=</option>
+            <option value=">">></option>
+            <option value="<"><</option>
+            <option value="!=">!=</option>
+        </select>
+        <input  style="width: 200px; float: left" type="text" id="sensorvaluesearch-value" class="form-control" name="SensorValueSearch[value]">
+
+        <div class="help-block"></div>
+    </div -->
+    
     <?= $form->field($model, 'value') ?>
 
     <div class="form-group">

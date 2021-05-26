@@ -11,6 +11,7 @@ use app\models\SensorValue;
  */
 class SensorValueSearch extends SensorValue
 {
+    public $bigless = '=';
     /**
      * {@inheritdoc}
      */
@@ -18,7 +19,7 @@ class SensorValueSearch extends SensorValue
     {
         return [
             [['id', 'sensor_id', 'device_id'], 'integer'],
-            [['created'], 'safe'],
+            [['created', 'bigless'], 'safe'],
             [['value'], 'number'],
         ];
     }
@@ -56,7 +57,7 @@ class SensorValueSearch extends SensorValue
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        //print_r($this);exit;
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -65,6 +66,8 @@ class SensorValueSearch extends SensorValue
             'device_id' => $this->device_id,
             'value' => $this->value,
         ]);
+        
+        //$query->andFilterWhere([$this->bigless, 'value', $this->value]);
 
         return $dataProvider;
     }

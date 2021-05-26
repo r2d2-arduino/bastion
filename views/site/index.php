@@ -6,39 +6,80 @@ use app\models\SensorValue;
 use app\models\Home;
 use app\models\Position;
 use app\models\Device;
-use app\models\Connection;
+
 
 $this->registerJsFile('@web/js/speedometer.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
 /* @var $this yii\web\View */
-$hCnt = Home::find()->where(['user_id' => Yii::$app->user->id])->count();
-$pCnt = Position::find()->where(['user_id' => Yii::$app->user->id])->count();
-$dCnt = Device::find()->where(['user_id' => Yii::$app->user->id])->count();
-$sCnt = Sensor::find()->where(['user_id' => Yii::$app->user->id])->count();
-$cCnt = Connection::find()->count();
+$homes = Home::find()->select(['id', 'name'])->where(['user_id' => Yii::$app->user->id])->all();
+$positions = Position::find()->select(['id', 'name'])->where(['user_id' => Yii::$app->user->id])->all();
+$devices = Device::find()->select(['id', 'name'])->where(['user_id' => Yii::$app->user->id])->all();
+$sensors = Sensor::find()->where(['user_id' => Yii::$app->user->id])->all();
 
-//$maxIds = SensorValue::find()->select(['MAX(id) as id'])->groupBy(['sensor_id'])->column();
-$maxIds = [1,2,3,4];
 ?>
 <div class="site-index">
-
+    
+    <!-- ul class="nav nav-pills">
+        <li class="nav-item">
+            <div style="padding: 10px 15px">Home:</div>
+        </li>
+        <?php foreach ($homes as $home): 
+            $pCnt = Position::find()->where(['home_id' => $home->id])->count();
+            if ($pCnt > 0): ?>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"><?=$home->name.' ('.$pCnt.')';?></a>
+        </li>
+        <?php 
+        endif;
+        endforeach; ?>
+    </ul>
+    
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <div style="padding: 10px 15px">Position:</div>
+        </li>
+        <?php foreach ($positions as $position): 
+            $dCnt = Device::find()->where(['position_id' => $position->id])->count();
+            if ($dCnt > 0): ?>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"><?=$position->name.' ('.$dCnt.')';?></a>
+        </li>
+        <?php 
+        endif;
+        endforeach; ?>
+    </ul>
+    
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <div style="padding: 10px 15px">Device:</div>
+        </li>
+        <?php foreach ($devices as $device): ?>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"><?=$device->name;?></a>
+        </li>
+        <?php endforeach; ?>
+    </ul -->
+    
     <div class="jumbotron">
         <h1>Welcome to Bastion!</h1>
-
-        <p class="lead">Homes: <?=$hCnt;?> &nbsp; Positions: <?=$pCnt;?> &nbsp; Devices: <?=$dCnt;?> &nbsp; Sensors: <?=$sCnt;?></p>
+        <p class="lead"></p>
     </div>
 
     <div class="body-content">
         <div class="row">        
-            <?php foreach ($maxIds as $svid): 
-                $sensorValue = SensorValue::find()->where(['id' => (int) $svid])->one(); ?>
-                <?= $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor_id' => $sensorValue->sensor_id]); ?>
+            <?php foreach ($sensors as $sensor): ?>
+                <?= $this->render('//layouts/_speedometer', ['value' => $sensor->min_rate, 'sensor' => $sensor]); ?>
             <?php endforeach; ?>
         </div>
     </div>
 </div>
 <script>
-setTimeout(function(){ 
+window.onload = function () 
+{
     getLastSensorsValue();
-}, 3000);
+}
+
+setInterval(function(){ 
+    getLastSensorsValue();
+}, 5000);
 </script>

@@ -10,6 +10,12 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
+/*use app\models\Sensor;
+use app\models\Home;
+use app\models\Position;
+use app\models\Device;*/
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -43,14 +49,19 @@ AppAsset::register($this);
             ];
             if (!Yii::$app->user->isGuest)
             {
+                /*$hCnt = Home::find()->where(['user_id' => Yii::$app->user->id])->count();
+                $pCnt = Position::find()->where(['user_id' => Yii::$app->user->id])->count();
+                $dCnt = Device::find()->where(['user_id' => Yii::$app->user->id])->count();
+                $sCnt = Sensor::find()->where(['user_id' => Yii::$app->user->id])->count();*/
+                
                 $items = [
                    // ['label' => 'Main', 'url' => ['/site/index']],
                     //['label' => 'User', 'url' => ['/user/index']],
                     ['label' => 'Homes', 'url' => ['/home/index']],
                     ['label' => 'Positions', 'url' => ['/position/index']],
-                    ['label' => 'Connections', 'url' => ['/connection/index']],
                     ['label' => 'Devices', 'url' => ['/device/index']],
                     ['label' => 'Sensors', 'url' => ['/sensor/index']],
+                    ['label' => 'Connections', 'url' => ['/connection/index']],
                     ['label' => 'Values', 'url' => ['/sensor-value/index']],
                     '<li>'. Html::beginForm(['/site/logout'], 'post')
                     . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')',
