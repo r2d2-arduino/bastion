@@ -51,7 +51,8 @@ foreach ($devSensors as $devsen)
 </div>
 <div class="body-content">
     <div class="row">
-        <?php foreach ($sensors as $sensor): ?>
+        <?php foreach ($sensors as $sensor): 
+            $sensorValues = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one(); ?>
             <?= $this->render('//layouts/_speedometer', ['value' => $sensor->min_rate, 'sensor' => $sensor]) ?>
         <?php endforeach; ?>
     </div>

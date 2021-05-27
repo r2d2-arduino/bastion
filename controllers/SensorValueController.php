@@ -118,31 +118,15 @@ class SensorValueController extends Controller
         $sensor_id = Yii::$app->request->post('sensor_id', 0);
         $device_id = Yii::$app->request->post('device_id', 0);
         
-        if ($sensor_id)
-        {
-            $maxIds[] = SensorValue::find()->where(['sensor_id' => $sensor_id])->max();
-        }
-        {
-            $maxIds = SensorValue::find()->select(['MAX(id) as id'])->groupBy(['sensor_id'])->column();
-        }
+        $sensorValues = [];
+        $sensors = \app\models\Sensor::find()->select(['id'])->where(['user_id' => Yii::$app->user->id])->all();
         
-        $sensors = [];
-        
-        if ($maxIds)
+        foreach ($sensors as $sensor)
         {
-            foreach ($maxIds as $sid)
-            {
-                $sensors[] = SensorValue::find()->select(['sensor_id', 'value'])->where(['id' => (int) $sid])->one();
-            }
+            $sensorValues = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
         }
-        
-        echo \yii\helpers\Json::encode($sensors);
-    }
-
-    
-    public function actionTest()
-    {
-        echo 'test1';
+                
+        echo \yii\helpers\Json::encode($sensorValues);
     }
     
      /**
