@@ -10,10 +10,10 @@ $period = Yii::$app->request->get('period', 'day');
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
-$maxSensorDateId = SensorValue::find()->where(['sensor_id' => $model->id])->max('id');
+/*$maxSensorDateId = SensorValue::find()->where(['sensor_id' => $model->id])->max('id');
 $maxSensorDate = SensorValue::find()->select(['created'])->where(['id' => (int)$maxSensorDateId])->one();
-
-$cutDate = new DateTime($maxSensorDate->created);
+$cutDate = new DateTime($maxSensorDate->created);*/
+$cutDate = new DateTime();
 
 if ($period === 'minute')
 {

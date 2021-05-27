@@ -52,16 +52,18 @@ foreach ($devSensors as $devsen)
 <div class="body-content">
     <div class="row">
         <?php foreach ($sensors as $sensor): ?>
-            <?php
-            $sensorValId = SensorValue::find()->where(['sensor_id' => $sensor->id])->max('id');
-            $sensorValue  = SensorValue::find()->where(['id' => $sensorValId])->one();
-            ?>
-            <?= $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]) ?>
+            <?= $this->render('//layouts/_speedometer', ['value' => $sensor->min_rate, 'sensor' => $sensor]) ?>
         <?php endforeach; ?>
     </div>
 </div>
 <script>
-setTimeout(function(){ 
+window.onload = function () 
+{
+    setTimeout(function(){
+        getLastSensorsValue();
+    }, 500);
+}
+setInterval(function(){ 
     getLastSensorsValue();
-}, 20000);
+}, 5000);
 </script>
