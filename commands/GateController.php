@@ -112,7 +112,7 @@ class GateController extends Controller
     {
         $total = (int) $parts[0] + (int) $parts[1] + (int) $parts[2] + (int) $parts[3] + (int) $parts[4] + (int) $parts[5] + (int) $parts[6];
         
-        return ( ($parts[7] === floor($total / 256)) && ($parts[8] === floor($total % 256)) );
+        return ( ( (int) $parts[7] === (int) floor($total / 256)) && ( (int) $parts[8] === (int) floor($total % 256)) );
     }
     
 }

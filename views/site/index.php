@@ -74,11 +74,6 @@ $sensors = Sensor::find()->where(['user_id' => Yii::$app->user->id])->all();
     </div>
 </div>
 <script>
-window.onload = function () 
-{
-    getLastSensorsValue();
-}
-
 setInterval(function(){ 
     getLastSensorsValue();
 }, 5000);

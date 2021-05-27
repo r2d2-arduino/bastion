@@ -24,6 +24,7 @@ if ($period === 'minute')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['MINUTE(created)'])
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'hour')
@@ -35,6 +36,7 @@ if ($period === 'hour')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['HOUR(created)'])
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'day')
@@ -46,6 +48,7 @@ if ($period === 'day')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['DAY(created)'])
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'week')
@@ -57,6 +60,7 @@ if ($period === 'week')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['WEEK(created)'])
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'month')
@@ -68,6 +72,7 @@ if ($period === 'month')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['MONTH(created)'])
+            ->orderBy('id')
             ->all();
 }
 
