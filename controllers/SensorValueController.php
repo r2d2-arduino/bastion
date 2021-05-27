@@ -123,7 +123,7 @@ class SensorValueController extends Controller
         
         foreach ($sensors as $sensor)
         {
-            $sensorValues = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
+            $sensorValues[] = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
         }
                 
         echo \yii\helpers\Json::encode($sensorValues);
