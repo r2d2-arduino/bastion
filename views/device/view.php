@@ -52,8 +52,8 @@ foreach ($devSensors as $devsen)
 <div class="body-content">
     <div class="row">
         <?php foreach ($sensors as $sensor): 
-            $sensorValues = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one(); ?>
-            <?= $this->render('//layouts/_speedometer', ['value' => $sensorValues->value, 'sensor' => $sensor]) ?>
+            $sensorValue = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one(); ?>
+            <?= $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]) ?>
         <?php endforeach; ?>
     </div>
 </div>

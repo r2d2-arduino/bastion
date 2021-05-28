@@ -10,11 +10,9 @@ $period = Yii::$app->request->get('period', 'day');
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
-/*$maxSensorDateId = SensorValue::find()->where(['sensor_id' => $model->id])->max('id');
-$maxSensorDate = SensorValue::find()->select(['created'])->where(['id' => (int)$maxSensorDateId])->one();
-$cutDate = new DateTime($maxSensorDate->created);*/
-$cutDate = new DateTime();
+$sensorValue = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $model->id])->orderBy('id desc')->limit(1)->one();
 
+$cutDate = new DateTime($sensorValue->created);
 
 
 if ($period === 'minute')
@@ -22,24 +20,23 @@ if ($period === 'minute')
     $cutDate->modify('-1 hour');
 
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "created"])
+            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%H:%i') as created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['MINUTE(created)'])
-            ->orderBy('created')
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'hour')
 {
     $cutDate->modify('-1 day');
-    var_dump($cutDate->format('Y-m-d H:i:s'));
-//DATE_FORMAT(created, '%H') as 
+
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "created"])
+            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%H') as created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['HOUR(created)'])
-            ->orderBy('created')
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'day')
@@ -51,7 +48,7 @@ if ($period === 'day')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['DAY(created)'])
-            ->orderBy('created')
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'week')
@@ -59,11 +56,11 @@ if ($period === 'week')
     $cutDate->modify('-1 year');
 
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%d.%m.%y') as created"])
+            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%d.%m') as created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['WEEK(created)'])
-            ->orderBy('created')
+            ->orderBy('id')
             ->all();
 }
 if ($period === 'month')
@@ -75,7 +72,7 @@ if ($period === 'month')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['MONTH(created)'])
-            ->orderBy('created')
+            ->orderBy('id')
             ->all();
 }
 
