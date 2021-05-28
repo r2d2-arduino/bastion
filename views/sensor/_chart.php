@@ -10,10 +10,9 @@ $period = Yii::$app->request->get('period', 'day');
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
-$sensorValue = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $model->id])->orderBy('id desc')->limit(1)->one();
+$sensorValue = SensorValue::find()->select(['created'])->where(['sensor_id' => $model->id])->orderBy('id desc')->limit(1)->one();
 
 $cutDate = new DateTime($sensorValue->created);
-
 
 if ($period === 'minute')
 {
