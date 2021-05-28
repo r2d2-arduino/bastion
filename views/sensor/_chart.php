@@ -34,7 +34,7 @@ if ($period === 'hour')
     $cutDate->modify('-1 day');
 //DATE_FORMAT(created, '%H') as 
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%H') as created"])
+            ->select(['AVG(value) as value', "created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['HOUR(created)'])
