@@ -32,6 +32,7 @@ if ($period === 'minute')
 if ($period === 'hour')
 {
     $cutDate->modify('-1 day');
+    var_dump($cutDate->format('Y-m-d H:i:s'));
 //DATE_FORMAT(created, '%H') as 
     $items = SensorValue::find()
             ->select(['AVG(value) as value', "created"])
@@ -46,7 +47,7 @@ if ($period === 'day')
     $cutDate->modify('-1 month');
 
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "created"])
+            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%d.%m') as created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['DAY(created)'])
