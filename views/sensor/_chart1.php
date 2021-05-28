@@ -6,7 +6,7 @@
 use app\models\SensorValue;
 use yii\web\Request;
 
-$period = Yii::$app->request->get('period', 'minute');
+$period = Yii::$app->request->get('period', 'day');
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
@@ -17,30 +17,14 @@ $cutDate = new DateTime($sensorValue->created);
 if ($period === 'minute')
 {
     $cutDate->modify('-1 hour');
-    
-    $start = SensorValue::find()
-            ->select('id')->where(['sensor_id' => $model->id])
-            ->andWhere(['<=', 'created' , $cutDate->format('Y-m-d H:i:s')])
-            ->orderBy('id desc')
-            ->limit(1)->one();
-    
-    $limit = SensorValue::find()
+
+    $items = SensorValue::find()
+            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%H:%i') as created"])
             ->where(['sensor_id' => $model->id])
-            ->andWhere(['>=', 'id', $start->id ])
-            ->orderBy('id desc')
-            ->count('id');
-    
-    $sql = "select AVG(value) as value, DATE_FORMAT(created, '%H:%i %d') as created
-from (select created, value
-from sensor_value
-where sensor_id = ".$model->id." 
-order by id desc
-limit ".$limit.") as t1
-where created >= '".$cutDate->format('Y-m-d H:i:s')."'
-group by MINUTE(created)
-order by created";
-        
-    $items = SensorValue::findBySql($sql)->all();
+            ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
+            ->groupBy(['MINUTE(created)'])
+            ->orderBy('id')
+            ->all();
 }
 if ($period === 'hour')
 {
@@ -115,8 +99,8 @@ if ($items)
         }
     }
 }
-$lowY = $minY + $maxY > 200 ? floor($minY/10) * 10 : floor($minY);
-$hiY =  $minY + $maxY > 200 ? ceil($maxY/10) * 10  : ceil($maxY);
+$lowY = floor($minY/10) * 10;
+$hiY = ceil($maxY/10) * 10;
 
 ?>
 <select class="form-control" aria-label="Choose period..." onchange="changeChart($(this).val())" >
