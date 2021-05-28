@@ -53,17 +53,11 @@ foreach ($devSensors as $devsen)
     <div class="row">
         <?php foreach ($sensors as $sensor): 
             $sensorValues = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one(); ?>
-            <?= $this->render('//layouts/_speedometer', ['value' => $sensor->min_rate, 'sensor' => $sensor]) ?>
+            <?= $this->render('//layouts/_speedometer', ['value' => $sensorValues->value, 'sensor' => $sensor]) ?>
         <?php endforeach; ?>
     </div>
 </div>
 <script>
-window.onload = function () 
-{
-    setTimeout(function(){
-        getLastSensorsValue();
-    }, 500);
-}
 setInterval(function(){ 
     getLastSensorsValue();
 }, 5000);

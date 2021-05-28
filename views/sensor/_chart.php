@@ -15,28 +15,30 @@ $maxSensorDate = SensorValue::find()->select(['created'])->where(['id' => (int)$
 $cutDate = new DateTime($maxSensorDate->created);*/
 $cutDate = new DateTime();
 
+
+
 if ($period === 'minute')
 {
     $cutDate->modify('-1 hour');
 
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%H:%i') as created"])
+            ->select(['AVG(value) as value', "created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['MINUTE(created)'])
-            ->orderBy('id')
+            ->orderBy('created')
             ->all();
 }
 if ($period === 'hour')
 {
     $cutDate->modify('-1 day');
-
+//DATE_FORMAT(created, '%H') as 
     $items = SensorValue::find()
             ->select(['AVG(value) as value', "DATE_FORMAT(created, '%H') as created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['HOUR(created)'])
-            ->orderBy('id')
+            ->orderBy('created')
             ->all();
 }
 if ($period === 'day')
@@ -44,11 +46,11 @@ if ($period === 'day')
     $cutDate->modify('-1 month');
 
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%d.%m') as created"])
+            ->select(['AVG(value) as value', "created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['DAY(created)'])
-            ->orderBy('id')
+            ->orderBy('created')
             ->all();
 }
 if ($period === 'week')
@@ -56,11 +58,11 @@ if ($period === 'week')
     $cutDate->modify('-1 year');
 
     $items = SensorValue::find()
-            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%d.%m') as created"])
+            ->select(['AVG(value) as value', "DATE_FORMAT(created, '%d.%m.%y') as created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['WEEK(created)'])
-            ->orderBy('id')
+            ->orderBy('created')
             ->all();
 }
 if ($period === 'month')
@@ -72,7 +74,7 @@ if ($period === 'month')
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['MONTH(created)'])
-            ->orderBy('id')
+            ->orderBy('created')
             ->all();
 }
 

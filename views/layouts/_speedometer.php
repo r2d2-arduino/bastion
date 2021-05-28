@@ -24,7 +24,7 @@ $grad = round(180 * ($value - $sensor->min_rate) / ($sensor->max_rate - $sensor-
             <div class="needle" style="transform: rotate(<?=$grad;?>deg);"></div>
             <div class="gauge-center">
                 <div class="label"></div>
-                <div class="number"><?=$value > 100 ? round($value) : $value;?></div>
+                <div class="number"><?=$value > 100 ? round($value) : (float) $value;?></div>
             </div>    
         </div>
     </div>
