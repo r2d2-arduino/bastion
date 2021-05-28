@@ -10,6 +10,7 @@ namespace app\commands;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use app\models\SensorValue;
+use app\models\SensorStat;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -55,7 +56,7 @@ class GateController extends Controller
     
     public function actionData($raw = '')
     {
-        //yii gate/data 2;2;20.43;...
+        //yii gate/data 1;2;1;20;43;1;7;0;75
         
         $error = self::processingData($raw);
         
@@ -84,19 +85,24 @@ class GateController extends Controller
             return "ERROR: Bad CRC sum!";
         }
         
-        $channel_id = (int) $parts[0];
+        //$channel_id = (int) $parts[0];
         $device_id  = (int) $parts[1];
         $sensor_id  = (int) $parts[2];
         $valueH     = (int) $parts[3];
         $valueL     = (int) $parts[4];
         $type       = (int) $parts[5];
-        $counter    = (int) $parts[6];
-        $crc1       = (int) $parts[7];
-        $crc2       = (int) $parts[8];
+        //$counter    = (int) $parts[6];
+        //$crc1       = (int) $parts[7];
+        //$crc2       = (int) $parts[8];
         
         $value = self::getDataValue($valueH, $valueL, $type);
         
-        return SensorValue::add($device_id, $sensor_id, $value);
+        $id = SensorValue::add($device_id, $sensor_id, $value);
+        
+        $stat = SensorStat::getOne($device_id, $sensor_id);        
+        $stat->updateByDate($value);
+        
+        return $id;
     }
     
     private static function getDataValue($valueH, $valueL, $type)

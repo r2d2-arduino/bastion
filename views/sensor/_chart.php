@@ -30,13 +30,12 @@ if ($period === 'minute')
             ->orderBy('id desc')
             ->count('id');
     
-    $sql = "select AVG(value) as value, DATE_FORMAT(created, '%H:%i %d') as created
+    $sql = "select AVG(value) as value, DATE_FORMAT(created, '%H:%i') as created
 from (select created, value
 from sensor_value
 where sensor_id = ".$model->id." 
 order by id desc
 limit ".$limit.") as t1
-where created >= '".$cutDate->format('Y-m-d H:i:s')."'
 group by MINUTE(created)
 order by created";
         
