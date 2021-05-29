@@ -6,7 +6,7 @@
 use app\models\SensorValue;
 use yii\web\Request;
 
-$period = Yii::$app->request->get('period', 'day');
+$period = Yii::$app->request->get('period', 'minute');
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
