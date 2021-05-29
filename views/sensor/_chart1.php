@@ -18,13 +18,35 @@ if ($period === 'minute')
 {
     $cutDate->modify('-1 hour');
 
-    $items = SensorValue::find()
+   /* $items = SensorValue::find()
             ->select(['AVG(value) as value', "DATE_FORMAT(created, '%H:%i') as created"])
             ->where(['sensor_id' => $model->id])
             ->andWhere(['>', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->groupBy(['MINUTE(created)'])
             ->orderBy('id')
-            ->all();
+            ->all();*/
+ $start = SensorValue::find()
+            ->select('id')->where(['sensor_id' => $model->id])
+            ->andWhere(['<=', 'created' , $cutDate->format('Y-m-d H:i:s')])
+            ->orderBy('id desc')
+            ->limit(1)->one();
+    
+    $limit = SensorValue::find()
+            ->where(['sensor_id' => $model->id])
+            ->andWhere(['>=', 'id', $start->id ])
+            ->orderBy('id desc')
+            ->count('id');
+    
+    $sql = "select AVG(value) as value, DATE_FORMAT(created, '%H:%i') as created
+from (select created, value
+from sensor_value
+where sensor_id = ".$model->id." 
+order by id desc
+limit ".$limit.") as t1
+group by MINUTE(created)
+order by created";
+        
+    $items = SensorValue::findBySql($sql)->all();    
 }
 if ($period === 'hour')
 {
