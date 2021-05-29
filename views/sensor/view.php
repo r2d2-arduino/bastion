@@ -46,4 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
 </div>
-<?= $this->render('_chart', ['model' => $model,]) ?>
+<?php $chart = Yii::$app->request->get('chart', '1');
+if ( (int) $chart === 2):
+    echo $this->render('_chart2', ['model' => $model,]);
+else:
+    echo $this->render('_chart', ['model' => $model,]);
+endif;
