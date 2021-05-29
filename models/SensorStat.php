@@ -79,23 +79,34 @@ class SensorStat extends \yii\db\ActiveRecord
 
         $cutDate = new \DateTime($created);
         
-        $amount = [
-            'minute' => 59,
-            'hour' => 23,
-            'day' => 31,
-            'week' => 53,
-            'month' => 12,
+        $monthName = [
+            1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 
+            7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec'
         ];
         
-        $startFrom = [
-            'minute' => 0,
-            'hour' => 0,
-            'day' => 1,
-            'week' => 1,
-            'month' => 1,
+        $upper = [
+            'minute' => 'hour', 'hour' => 'day', 'day' => 'month', 'week' => 'year', 'month' => 'year'
         ];
         
-        $start = [
+        $end = [
+            'minute' => 59, 'hour' => 23, 'day' => 31, 'week' => 53, 'month' => 12,
+        ];
+        
+        $begin = [
+            'minute' => 0, 'hour' => 0, 'day' => 1, 'week' => 1, 'month' => 1,
+        ];
+        
+        $current = [
+            'minute' => (int) $cutDate->format('i'),
+            'hour' => (int) $cutDate->format('H'),
+            'day' => (int) $cutDate->format('d'),
+            'week' => (int) $cutDate->format('W'),
+            'month' => (int) $cutDate->format('m'),
+        ];
+
+        $cutDate->modify('-1 '.$upper[$name]);
+
+        $previos = [
             'minute' => (int) $cutDate->format('i'),
             'hour' => (int) $cutDate->format('H'),
             'day' => (int) $cutDate->format('d'),
@@ -105,59 +116,66 @@ class SensorStat extends \yii\db\ActiveRecord
         
         if ($name == 'day')
         {
-            $amount['day'] = $cutDate->format('t');
+            $end['day'] = $cutDate->format('t');
         }
-
-        $items = [];
-        $labels = [];
-       /* print_r($cutDate);
-        print_r('<br>');
-        print_r($start[$name]);
-        print_r('<br>');
-        print_r($amount[$name]);*/
         
-        for ($i = $start[$name]; $i < $amount[$name]; $i++)
+       // print_r($previos);
+        
+        $itemsRaw = [];
+        $labelsRaw = [];
+
+        for ($i = $begin[$name]; $i <= $end[$name]; $i++)
         {
             $attr = $name.$i;
             if ($this->$attr)
             {
-                $items[] = $this->$attr;
-                $labels[] = $i < 10 ? "0".$i : $i;
+                $itemsRaw[] = $this->$attr;
                 
-                if ( (float) $this->$attr < $minY)
+                $label = $i;
+                                
+                if ($name === 'minute')
                 {
-                    $minY = (float) $this->$attr;
-                }
-                if ( (float) $this->$attr > $maxY)
+                    $label = $i < 10 ? '0'.$i : ''.$i;
+                    $label = $i > $current[$name] ? $previos[$upper[$name]].':'.$label : $current[$upper[$name]].':'.$label;
+                }    
+                if ($name === 'hour')
                 {
-                    $maxY = (float) $this->$attr;
+                    $label = $i > $current[$name] ? $label.':00' : $label.':00';
                 }
+                if ($name === 'day')
+                {
+                    $month = $i > $current[$name] ? $monthName[$previos[$upper[$name]]] : $monthName[$current[$upper[$name]]];
+                    $label = $month.' '.$label;
+                }
+                if ($name === 'month')
+                {
+                    $label = $monthName[$label];
+                }
+                
+                $labelsRaw[] = $label;
+                
+                $minY = (float) $this->$attr < $minY ? (float) $this->$attr : $minY;
+                $maxY = (float) $this->$attr > $maxY ? (float) $this->$attr : $maxY;
             }
         }
-     
-        /*for ($j = $startFrom[$name]; $j < $start[$name]; $j++)
-        {
-            $attr = $name.$j;
-            if ($this->$attr)
-            {
-                $items[] = $this->$attr;
-                $labels[] = $j < 10 ? "0".$j : $j;
-                
-                if ( (float) $this->$attr < $minY)
-                {
-                    $minY = (float) $this->$attr;
-                }
-                if ( (float) $this->$attr > $maxY)
-                {
-                    $maxY = (float) $this->$attr;
-                }
-            }
-        }*/
+        $items1 = $items2 = $itemsRaw;
+        array_splice($items1, $current[$name] + 1);        
+        array_splice($items2, 0, $current[$name] + 1);
+
+        $items = array_merge($items2, $items1);
+        
+        $labels1 = $labels2 = $labelsRaw;
+        array_splice($labels1, $current[$name] +1);        
+        array_splice($labels2, 0, $current[$name] + 1);
+        
+        $labels = array_merge($labels2, $labels1);
         
         $lowY = $minY + $maxY > 200 ? floor($minY/10) * 10 : floor($minY);
         $hiY =  $minY + $maxY > 200 ? ceil($maxY/10) * 10  : ceil($maxY);
         
-        return ['x' => $labels, 'y' => $items, 'lowY' => $lowY, 'hiY' => $hiY];
+        return [
+            'x' => $labels, 'y' => $items, 'lowY' => $lowY, 'hiY' => $hiY
+        ];
     }
     
 }
