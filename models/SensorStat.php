@@ -60,7 +60,7 @@ class SensorStat extends \yii\db\ActiveRecord
         $minute = 'minute'.(int) $datetime->format('i');
         $hour = 'hour'.(int) $datetime->format('H');
         $day = 'day'.(int) $datetime->format('d');
-        $week = 'week'.(int) $datetime->format('w');
+        $week = 'week'.(int) $datetime->format('W');
         $month = 'month'.(int) $datetime->format('m');
         
         $this->$minute = $this->$minute ? ($this->$minute + $value)/2 : $value;
@@ -110,7 +110,11 @@ class SensorStat extends \yii\db\ActiveRecord
 
         $items = [];
         $labels = [];
-
+       /* print_r($cutDate);
+        print_r('<br>');
+        print_r($start[$name]);
+        print_r('<br>');
+        print_r($amount[$name]);*/
         
         for ($i = $start[$name]; $i < $amount[$name]; $i++)
         {
