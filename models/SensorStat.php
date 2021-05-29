@@ -71,8 +71,14 @@ class SensorStat extends \yii\db\ActiveRecord
         $this->updateByName('hour', $current, $datetime); 
         
         $minProp = 'minute'.$current['minute'];
-        $this->$minProp = $value;
-
+        if ( (int) $this->minute != $current['minute'] )
+        {
+            $this->$minProp = $value;
+        }    
+        else
+        {
+            $this->$minProp = ($this->$minProp + $value) / 2;
+        }
         $this->save();
     }
     

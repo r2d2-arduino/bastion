@@ -25,7 +25,7 @@ if ($period === 'minute')
             ->groupBy(['MINUTE(created)'])
             ->orderBy('id')
             ->all();*/
- $start = SensorValue::find()
+    $start = SensorValue::find()
             ->select('id')->where(['sensor_id' => $model->id])
             ->andWhere(['<=', 'created' , $cutDate->format('Y-m-d H:i:s')])
             ->orderBy('id desc')
