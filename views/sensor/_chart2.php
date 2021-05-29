@@ -121,9 +121,9 @@ if ($items)
         }
     }
 }
-$lowY = floor($minY/10) * 10;
-$hiY = ceil($maxY/10) * 10;
 
+$lowY = $minY + $maxY > 200 ? floor($minY/10) * 10 : floor($minY);
+$hiY =  $minY + $maxY > 200 ? ceil($maxY/10) * 10  : ceil($maxY);
 ?>
 <select class="form-control" aria-label="Choose period..." onchange="changeChart($(this).val())" >
     <option value="minute" <?=$period==='minute' ? 'selected' : ''?> >Minutly</option>
