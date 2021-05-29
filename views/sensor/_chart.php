@@ -15,7 +15,8 @@ $sensorValue = SensorValue::find()->select(['created'])->where(['sensor_id' => $
 
 $stat = SensorStat::find()->where(['sensor_id' => $model->id])->one();
 
-$items = $stat->getData($period, $sensorValue->created);
+if ($stat):
+    $items = $stat->getData($period, $sensorValue->created);
 ?>
 <select class="form-control" aria-label="Choose period..." onchange="changeChart($(this).val())" >
     <option value="minute" <?=$period==='minute' ? 'selected' : ''?> >Minutly</option>
@@ -86,3 +87,4 @@ function changeChart(name)
     window.location.href = window.location.href + '&period='+name
 }
 </script>
+<?php endif; ?>

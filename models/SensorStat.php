@@ -57,19 +57,122 @@ class SensorStat extends \yii\db\ActiveRecord
         $created = (new \yii\db\Query)->select( new yii\db\Expression('NOW()') )->scalar();
         $datetime = new \DateTime($created);
         
-        $minute = 'minute'.(int) $datetime->format('i');
-        $hour = 'hour'.(int) $datetime->format('H');
-        $day = 'day'.(int) $datetime->format('d');
-        $week = 'week'.(int) $datetime->format('W');
-        $month = 'month'.(int) $datetime->format('m');
+        $currMinute = (int) $datetime->format('i');
+        $currHour   = (int) $datetime->format('H');
+        $currDay    = (int) $datetime->format('d');
+        $currWeek   = (int) $datetime->format('W');
+        $currMonth  = (int) $datetime->format('m');
+        $totalDays  = (int) $datetime->format('t');
         
-        $this->$minute = $this->$minute ? ($this->$minute + $value)/2 : $value;
-        $this->$hour = $this->$hour ? ($this->$hour + $value)/2 : $value;
-        $this->$day = $this->$day ? ($this->$day + $value)/2 : $value;
-        $this->$week = $this->$week ? ($this->$week + $value)/2 : $value;
-        $this->$month = $this->$month ? ($this->$month + $value)/2 : $value;
+        if ( (int) $this->month !== $currMonth )
+        {
+            $this->setAvgMonth($totalDays);
+            $this->month = $currMonth;
+        }
+        if ( (int) $this->week !== $currWeek )
+        {
+            $this->setAvgWeek($datetime);
+            $this->week = $currWeek;
+        }
+        if ( (int) $this->day !== $currDay )
+        {
+            $this->setAvgDay();
+            $this->day = $currDay;
+        }        
+        if ( (int) $this->hour !== $currHour )
+        {
+            $this->setAvgHour();
+            $this->hour = $currHour;
+        }
         
+        $minuteProp = 'minute'.$currMinute;
+        $this->$minuteProp = $value;
+
         $this->save();
+    }
+    
+    private function setAvgHour()
+    {
+        $sum = 0;
+        $amount = 60;
+        for ($i = 0; $i < 60; $i++)
+        {
+            $prop = 'minute'.$i;
+            if ($this->$prop === null)
+            {
+                $amount--;
+            }
+            else
+            {
+                $sum = $sum + (float) $this->$prop; 
+            }
+        }
+        $avgProp = 'hour'.$this->hour;
+        $this->$avgProp = $amount > 0 ? $sum / $amount : null;
+    }
+    
+    private function setAvgDay()
+    {
+        $sum = 0;
+        $amount = 24;
+        for ($i = 0; $i < 24; $i++)
+        {
+            $prop = 'hour'.$i;
+            if ($this->$prop === null)
+            {
+                $amount--;
+            }
+            else
+            {
+                $sum = $sum + (float) $this->$prop; 
+            }
+        }
+        $avgProp = 'day'.$this->day;
+        $this->$avgProp = $amount > 0 ? $sum / $amount : null;
+    }
+
+    private function setAvgWeek($datetime)
+    {
+        $sum = 0;
+        $amount = 7;
+        for ($i = 0; $i < 7; $i++)
+        {
+            $day = (int) $datetime->format('d');
+            $datetime->modify('-1 day');
+        
+            $prop = 'day'.$day;
+            if ($this->$prop === null)
+            {
+                $amount--;
+            }
+            else
+            {
+                $sum = $sum + (float) $this->$prop; 
+            }
+        }
+        $avgProp = 'week'.$this->week;
+        $this->$avgProp = $amount > 0 ? $sum / $amount : null;
+    }
+    
+    private function setAvgMonth($totalDays)
+    {
+        $sum = 0;
+        $amount = $totalDays;
+        for ($i = 1; $i <= $totalDays; $i++)
+        {
+            $prop = 'day'.$i;
+            if ($this->$prop === null)
+            {
+                $amount--;
+            }
+            else
+            {
+                $sum = $sum + (float) $this->$prop; 
+            }
+        }
+        
+        $avgProp = 'month'.$this->month;
+        $this->$avgProp = $amount > 0 ? $sum / $amount : null;
     }
     
     public function getData($name, $created = null)
