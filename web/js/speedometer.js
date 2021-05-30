@@ -1,5 +1,6 @@
 function getLastSensorsValue(sensor_id = 0)
 {
+    $('.speedometer').removeClass('alive');
     $.ajax({
         type: 'post',
         dataType: 'json',
@@ -38,6 +39,7 @@ function getLastSensorsValue(sensor_id = 0)
                 
                 $('#sensor_'+data[i].sensor_id).data('grad', newGrad);
                 $('#sensor_'+data[i].sensor_id +' .number').html(value);
+                $('#sensor_'+data[i].sensor_id +'').parent().addClass('alive');
                 animateNeedleRotate(data[i].sensor_id, oldGrad, newGrad);    
             }
         },

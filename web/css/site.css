@@ -261,5 +261,28 @@ a.desc:after {
   border-right: 50px #E84C3D solid;
   background-color:#e67e22;
 }*/
+.speedometer img.led-green
+{
+    display: none;
+    position: absolute; 
+    right: 45px; 
+    top: 75px;
+}
+.speedometer img.led-red
+{
+    display: block;
+    position: absolute; 
+    right: 45px; 
+    top: 75px;
+}
+.speedometer.alive img.led-green
+{
+    display: block;
+}
+.speedometer.alive img.led-red
+{
+    display: none;
+}
 
 /* SPEEDOMETER END */
+
