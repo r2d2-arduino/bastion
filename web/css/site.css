@@ -267,13 +267,13 @@ a.desc:after {
     display: inline-block;
     width: 15px;
     height: 15px;
-    background-image: url(/bastion/web/images/led-red-15.png);
+    background-image: url(/web/images/led-red-15.png);
     vertical-align: middle;
 }
 
 .speedometer.alive .led
 {
-    background-image: url(/bastion/web/images/led-green-15.png);
+    background-image: url(/web/images/led-green-15.png);
 }
 
 /* SPEEDOMETER END */
