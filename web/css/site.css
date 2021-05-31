@@ -261,27 +261,19 @@ a.desc:after {
   border-right: 50px #E84C3D solid;
   background-color:#e67e22;
 }*/
-.speedometer img.led-green
+
+.speedometer .led
 {
-    display: none;
-    position: absolute; 
-    right: 45px; 
-    top: 75px;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-image: url(/bastion/web/images/led-red-15.png);
+    vertical-align: middle;
 }
-.speedometer img.led-red
+
+.speedometer.alive .led
 {
-    display: block;
-    position: absolute; 
-    right: 45px; 
-    top: 75px;
-}
-.speedometer.alive img.led-green
-{
-    display: block;
-}
-.speedometer.alive img.led-red
-{
-    display: none;
+    background-image: url(/bastion/web/images/led-green-15.png);
 }
 
 /* SPEEDOMETER END */

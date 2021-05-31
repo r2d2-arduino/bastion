@@ -121,9 +121,15 @@ class SensorValueController extends Controller
         $sensorValues = [];
         $sensors = \app\models\Sensor::find()->select(['id'])->where(['user_id' => Yii::$app->user->id])->all();
         
+        $now = (new \yii\db\Query)->select( new yii\db\Expression('NOW()') )->scalar();
+        
         foreach ($sensors as $sensor)
         {
-            $sensorValues[] = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
+            $senVal = SensorValue::find()->select(['sensor_id', 'created', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
+            if (self::getDiffInSeconds($now, $senVal->created) < 60)
+            {
+                $sensorValues[] = SensorValue::find()->select(['sensor_id', 'created', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
+            }
         }
                 
         echo \yii\helpers\Json::encode($sensorValues);
@@ -143,6 +149,25 @@ class SensorValueController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+    
+    public static function getDiffInSeconds( $dateFirst, $dateSecond = null )
+    {
+        //$datetime1 = new DateTime($dateFirst);
+        //$datetime2 = new DateTime($dateSecond);
+        //$interval = $datetime1->diff($datetime2);
+
+        $timeFirst = strtotime($dateFirst);
+        if ($dateSecond)
+        {
+            $timeSecond = strtotime($dateSecond);
+        }
+        else
+        {
+            $timeSecond = time();
+        }
+
+        return ($timeFirst - $timeSecond);
     }
     
     
