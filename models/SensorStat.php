@@ -265,9 +265,7 @@ class SensorStat extends \yii\db\ActiveRecord
             }
         }
         
-        if ($current[$name] > $start[$name])
-        {
-            $len = $current[$name] + 1;
+            $len = $current[$name] + 1 - $start[$name];
                     
             $items1 = $items2 = $itemsRaw;
             array_splice($items1, $len );        
@@ -281,12 +279,6 @@ class SensorStat extends \yii\db\ActiveRecord
             array_splice($labels2, 0, $len );
 
             $labels = array_merge($labels2, $labels1);
-        }
-        else
-        {
-            $items = $itemsRaw;
-            $labels = $labelsRaw;
-        }
 
         $lowY = $minY + $maxY > 200 ? floor($minY/10) * 10 : floor($minY);
         $hiY =  $minY + $maxY > 200 ? ceil($maxY/10) * 10  : ceil($maxY);
