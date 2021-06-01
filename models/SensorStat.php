@@ -34,6 +34,12 @@ class SensorStat extends \yii\db\ActiveRecord
         ];
     }
     
+    /**
+     * Find one or create new if not found
+     * @param type $device_id -
+     * @param type $sensor_id -
+     * @return \app\models\SensorStat - founded or created new model
+     */
     public static function getOne($device_id, $sensor_id)
     {
         $item = SensorStat::find()->where(['device_id' => $device_id, 'sensor_id' => $sensor_id])->one();
@@ -48,9 +54,8 @@ class SensorStat extends \yii\db\ActiveRecord
         return $item;
     }
     /**
-     * 
-     * @param type $value
-     * @param type $created
+     * Update stat by current date
+     * @param decimal $value
      */
     public function updateByDate($value)
     {
@@ -66,9 +71,9 @@ class SensorStat extends \yii\db\ActiveRecord
         ];        
        
         $this->updateByName('month', $current, $datetime);
-        $this->updateByName('week', $current, $datetime); 
-        $this->updateByName('day', $current, $datetime);        
-        $this->updateByName('hour', $current, $datetime); 
+        $this->updateByName('week',  $current, $datetime); 
+        $this->updateByName('day',   $current, $datetime);        
+        $this->updateByName('hour',  $current, $datetime); 
         
         $minProp = 'minute'.$current['minute'];
         if ( (int) $this->minute != $current['minute'] )
@@ -83,6 +88,12 @@ class SensorStat extends \yii\db\ActiveRecord
         $this->save();
     }
     
+    /**
+     * 
+     * @param string $name - name of time (minute/hour/day/week/month)
+     * @param array $current - current time parts in integers
+     * @param DateTime $datetime - current datetime
+     */
     private function updateByName($name, $current, $datetime)
     {
         if ( (int) $this->$name !== $current[$name] )
@@ -92,15 +103,39 @@ class SensorStat extends \yii\db\ActiveRecord
                 $this->$name = $current[$name];
             }
             
-            $this->setAvg($name, $datetime);
-            
+            $this->setAvg($name, $datetime);            
             $this->$name = $current[$name];
         }
+        else
+        {
+            $this->alterUpdateByName($name, $current);
+        }
     }
-
+    /**
+     * 
+     * @param string $name
+     * @param array  $current
+     */
+    private function alterUpdateByName($name, $current)
+    {
+        $lower = [
+            'hour' => 'minute', 'day' => 'hour', 'week' => 'day', 'month' => 'day',
+        ];
+        $prop = $name.$current[$name];
+        $altProp = $lower[$name];
+        
+        $this->$prop = $this->$altProp;
+    }
+    
+    
+    /**
+     * Set AVG value for time part
+     * @param string $name - name of time (minute/hour/day/week/month)
+     * @param DateTime $datetime - current datetime
+     */
     private function setAvg($name, $datetime)
     {
-        $begin = [
+        $start = [
             'hour' => 0,  'day' => 0,  'week' => 1, 'month' => 1,
         ];
         $end = [
@@ -113,17 +148,19 @@ class SensorStat extends \yii\db\ActiveRecord
         ];
                 
         $sum = 0;
-        $amount = $end[$name] - $begin[$name] + 1;
+        $amount = $end[$name] - $start[$name] + 1;
         
-        for ($i = $begin[$name]; $i <= $end[$name]; $i++)
+        for ($i = $start[$name]; $i <= $end[$name]; $i++)
         {
+            $prop = $lower[$name].$i;
+            
             if ($name === 'week')
             {
                 $day = (int) $datetime->format('d');
                 $datetime->modify('-1 day');
+                $prop = $lower[$name].$day;
             }
-            
-            $prop = $lower[$name].$i;
+                        
             if ($this->$prop === null)
             {
                 $amount--;
@@ -137,6 +174,12 @@ class SensorStat extends \yii\db\ActiveRecord
         $this->$avgProp = $amount > 0 ? $sum / $amount : null;
     }
 
+    /**
+     * Get chart data by name of time
+     * @param string $name - name of time (minute/hour/day/week/month)
+     * @param string $created - current time
+     * @return array
+     */
     public function getData($name, $created = null)
     {
         $minY = 9999;
@@ -153,12 +196,11 @@ class SensorStat extends \yii\db\ActiveRecord
             'minute' => 'hour', 'hour' => 'day', 'day' => 'month', 'week' => 'year', 'month' => 'year'
         ];
         
+        $start = [
+            'minute' => 0, 'hour' => 0, 'day' => 1, 'week' => 1, 'month' => 1,
+        ];        
         $end = [
             'minute' => 59, 'hour' => 23, 'day' => 31, 'week' => 53, 'month' => 12,
-        ];
-        
-        $begin = [
-            'minute' => 0, 'hour' => 0, 'day' => 1, 'week' => 1, 'month' => 1,
         ];
         
         $current = [
@@ -178,18 +220,16 @@ class SensorStat extends \yii\db\ActiveRecord
             'week' => (int) $cutDate->format('W'),
             'month' => (int) $cutDate->format('m'),
         ];
-        
+
         if ($name == 'day')
         {
             $end['day'] = $cutDate->format('t');
         }
         
-       // print_r($previos);
-        
         $itemsRaw = [];
         $labelsRaw = [];
 
-        for ($i = $begin[$name]; $i <= $end[$name]; $i++)
+        for ($i = $start[$name]; $i <= $end[$name]; $i++)
         {
             $attr = $name.$i;
             if ($this->$attr)
@@ -223,18 +263,30 @@ class SensorStat extends \yii\db\ActiveRecord
                 $maxY = (float) $this->$attr > $maxY ? (float) $this->$attr : $maxY;
             }
         }
-        $items1 = $items2 = $itemsRaw;
-        array_splice($items1, $current[$name] + 1);        
-        array_splice($items2, 0, $current[$name] + 1);
+        
+        if ($current[$name] > $start[$name])
+        {
+            $len = $current[$name] + 1;
+                    
+            $items1 = $items2 = $itemsRaw;
+            array_splice($items1, $len );        
+            array_splice($items2, 0, $len );
 
-        $items = array_merge($items2, $items1);
-        
-        $labels1 = $labels2 = $labelsRaw;
-        array_splice($labels1, $current[$name] +1);        
-        array_splice($labels2, 0, $current[$name] + 1);
-        
-        $labels = array_merge($labels2, $labels1);
-        
+            $items = array_merge($items2, $items1);
+
+
+            $labels1 = $labels2 = $labelsRaw;
+            array_splice($labels1, $len );        
+            array_splice($labels2, 0, $len );
+
+            $labels = array_merge($labels2, $labels1);
+        }
+        else
+        {
+            $items = $itemsRaw;
+            $labels = $labelsRaw;
+        }
+
         $lowY = $minY + $maxY > 200 ? floor($minY/10) * 10 : floor($minY);
         $hiY =  $minY + $maxY > 200 ? ceil($maxY/10) * 10  : ceil($maxY);
         
