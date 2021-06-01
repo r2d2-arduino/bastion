@@ -122,7 +122,8 @@ class SensorStat extends \yii\db\ActiveRecord
             'hour' => 'minute', 'day' => 'hour', 'week' => 'day', 'month' => 'day',
         ];
         $prop = $name.$current[$name];
-        $altProp = $lower[$name];
+        $altPropName = $lower[$name];
+        $altProp = $altPropName.$this->$altPropName;
         
         $this->$prop = $this->$altProp;
     }
