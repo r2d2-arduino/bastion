@@ -53,7 +53,10 @@ foreach ($devSensors as $devsen)
     <div class="row">
         <?php foreach ($sensors as $sensor): 
             $sensorValue = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one(); ?>
-            <?= $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]) ?>
+            <?php if ($sensorValue)
+            {
+                echo $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]);
+            } ?>
         <?php endforeach; ?>
     </div>
 </div>
