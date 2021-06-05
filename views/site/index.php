@@ -68,8 +68,12 @@ $sensors = Sensor::find()->where(['user_id' => Yii::$app->user->id])->all();
     <div class="body-content">
         <div class="row">        
             <?php foreach ($sensors as $sensor): 
-                $sensorValue = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one(); ?>
-                <?= $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]); ?>
+                $sensorCount = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->count();
+                $sensorValue = $sensorCount >= 0 ? SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one() : false; ?>
+                <?php if ($sensorValue)
+                {
+                   echo $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]);
+                } ?>
             <?php endforeach; ?>
         </div>
     </div>
