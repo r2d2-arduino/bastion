@@ -126,7 +126,7 @@ class SensorValueController extends Controller
         foreach ($sensors as $sensor)
         {
             $senVal = SensorValue::find()->select(['sensor_id', 'created', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
-            if (self::getDiffInSeconds($now, $senVal->created) < 60)
+            if ($senVal && self::getDiffInSeconds($now, $senVal->created) < 60)
             {
                 $sensorValues[] = SensorValue::find()->select(['sensor_id', 'created', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one();
             }
