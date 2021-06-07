@@ -146,6 +146,20 @@ a.desc:after {
     _padding: 5px;
 }
 
+label.checkUpdate
+{
+    margin: 20px 5px;
+}
+label.checkUpdate input
+{
+    margin: 0 5px;
+}
+.nav-header
+{
+    text-align: center;
+}
+
+
 /* SPEEDOMETER */
 
 .speedometer{
@@ -276,5 +290,23 @@ a.desc:after {
     background-image: url(/web/images/led-green-15.png);
 }
 
-/* SPEEDOMETER END */
+/* END SPEEDOMETER */
 
+/* MAIN TABS */
+.main-nav .nav-item
+{
+    margin: 5px;
+}
+
+.main-nav .nav-item.all
+{
+    width: 140px;
+}
+
+.main-nav .nav-item.nav-label
+{
+    padding: 10px 15px; 
+    width: 100px;
+    color: black;
+}
+/* END MAIN TABS */

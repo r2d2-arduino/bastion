@@ -37,7 +37,7 @@ $this->title = Yii::t('app', 'Homes');
                 {
                     $cnt = Position::find()->where(['home_id' => $data->id])->count();
                     return $cnt ? "<a aria-label='view' data-pjax='0' href='" . Url::base() .
-                            "/index.php?r=position%2Findex&PositionSearch%5Bname%5D=&PositionSearch%5Bhome_id%5D=" . $data->id . "'>" . $cnt . "</a>":"-";
+                            "/position/index?PositionSearch%5Bhome_id%5D=" . $data->id . "'>" . $cnt . "</a>":"-";
                 },
                 'format' => 'raw'
             ],

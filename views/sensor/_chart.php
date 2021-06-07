@@ -3,7 +3,6 @@
  * 
  * 
  */
-use app\models\SensorValue;
 use app\models\SensorStat;
 use yii\web\Request;
 
@@ -11,12 +10,10 @@ $period = Yii::$app->request->get('period', 'minute');
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
-$sensorValue = SensorValue::find()->select(['created'])->where(['sensor_id' => $model->id])->orderBy('id desc')->limit(1)->one();
-
 $stat = SensorStat::find()->where(['sensor_id' => $model->id])->one();
 
 if ($stat):
-    $items = $stat->getData($period, $sensorValue->created);
+    $items = $stat->getData($period);
 ?>
 <select class="form-control" aria-label="Choose period..." onchange="changeChart($(this).val())" >
     <option value="minute" <?=$period==='minute' ? 'selected' : ''?> >Minutly</option>
@@ -33,7 +30,7 @@ const data = {
 
   labels: <?php echo json_encode($items['x'], JSON_NUMERIC_CHECK); ?>,
   datasets: [{
-    label: '<?=$model->name?> (<?=$model->unit?>)',
+    label: '<?=$model->name?><?=$model->unit ? ' ('.$model->unit.')' : ''?>',
     backgroundColor: 'rgb(0, 55, 255)',
     borderColor: 'rgb(0, 55, 255)',
     data: <?php echo json_encode($items['y'], JSON_NUMERIC_CHECK); ?>,

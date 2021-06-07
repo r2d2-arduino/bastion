@@ -11,7 +11,7 @@ use app\models\SensorValue;
  */
 class SensorValueSearch extends SensorValue
 {
-    public $bigless = '=';
+    //public $bigless = '=';
     /**
      * {@inheritdoc}
      */
@@ -66,6 +66,7 @@ class SensorValueSearch extends SensorValue
             'device_id' => $this->device_id,
             'value' => $this->value,
         ]);
+        $query->orderBy('id desc');
         
         //$query->andFilterWhere([$this->bigless, 'value', $this->value]);
 

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\DeviceSensor;
 use app\models\Sensor;
-use app\models\SensorValue;
+use app\models\SensorStat;
 
 $this->registerJsFile('@web/js/speedometer.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 /* @var $this yii\web\View */
@@ -15,12 +15,8 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Devices'), 'url' => 
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-$devSensors = DeviceSensor::find()->where(['device_id' => $model->id])->all();
-$sensors = [];
-foreach ($devSensors as $devsen)
-{
-    $sensors[] = Sensor::find()->where(['id' => $devsen->sensor_id])->one();
-}
+$devSensors = DeviceSensor::find()->select('sensor_id')->where(['device_id' => $model->id])->column();
+$sensors = Sensor::find()->where(['in', 'id', $devSensors])->all();
 ?>
 <div class="device-view">
 
@@ -49,19 +45,20 @@ foreach ($devSensors as $devsen)
     ]) ?>
 
 </div>
+<label for="checkUpdate"><input type="checkbox" id="checkUpdate" value="1" />Update sensors</label>
 <div class="body-content">
     <div class="row">
         <?php foreach ($sensors as $sensor): 
-            $sensorValue = SensorValue::find()->select(['sensor_id', 'value'])->where(['sensor_id' => $sensor->id])->orderBy('id desc')->limit(1)->one(); ?>
-            <?php if ($sensorValue)
+            $sensorStat = SensorStat::find()->where(['sensor_id' => $sensor->id])->one(); ?>
+            <?php if ($sensorStat)
             {
-                echo $this->render('//layouts/_speedometer', ['value' => $sensorValue->value, 'sensor' => $sensor]);
+                echo $this->render('//layouts/_speedometer', ['value' => $sensorStat->getLastValue(), 'sensor' => $sensor]);
             } ?>
         <?php endforeach; ?>
     </div>
 </div>
 <script>
 setInterval(function(){ 
-    getLastSensorsValue();
+    getLastSensorsValue(0, <?=$model->id; ?>);
 }, 5000);
 </script>

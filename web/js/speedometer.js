@@ -1,11 +1,18 @@
-function getLastSensorsValue(sensor_id = 0)
+var _sensorGetCount = 0;
+function getLastSensorsValue(sensor_id = 0, device_id = 0)
 {
+    if ($('.btn.logout').length === 0 || _sensorGetCount > 1000 || $('#checkUpdate:checked').length === 0)
+    {
+        return false;
+    }
+    _sensorGetCount++;
+        
     $('.speedometer').removeClass('alive');
     $.ajax({
         type: 'post',
         dataType: 'json',
-        url: 'index.php?r=sensor-value%2Factual',
-        data: { sensor_id: sensor_id },
+        url: 'sensor/actual',
+        data: { sensor_id: sensor_id, device_id: device_id },
         success: function (data) 
         {
             var value = 0;

@@ -44,7 +44,7 @@ $this->title = Yii::t('app', 'Positions');
                 {
                     $cnt = Device::find()->where(['position_id' => $data->id])->count();
                     return $cnt ? "<a aria-label='view' data-pjax='0' href='" . Url::base() .
-                            "/index.php?r=device%2Findex&DeviceSearch%5Bname%5D=&DeviceSearch%5Bposition_id%5D=" . $data->id . "'>" . $cnt . "</a>" : "-";
+                            "/device/index?DeviceSearch%5Bposition_id%5D=" . $data->id . "'>" . $cnt . "</a>" : "-";
                 },
                 'format' => 'raw'
             ],                        

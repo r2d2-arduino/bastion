@@ -43,7 +43,7 @@ foreach ($devices as $device)
 
     <?php //= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'created') ?>
+    <?php //= $form->field($model, 'created') ?>
 
     <?= $form->field($model, 'sensor_id')->dropDownList($sensorList, ['prompt' => 'Выберите сенсор...']); ?>
     <?= $form->field($model, 'device_id')->dropDownList($deviceList, ['prompt' => 'Выберите устройство...']); ?>
@@ -64,7 +64,7 @@ foreach ($devices as $device)
         <div class="help-block"></div>
     </div -->
     
-    <?= $form->field($model, 'value') ?>
+    <?php //= $form->field($model, 'value') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

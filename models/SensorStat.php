@@ -26,6 +26,7 @@ class SensorStat extends \yii\db\ActiveRecord
         return [
             [['device_id', 'sensor_id'], 'required'],
             [['device_id', 'sensor_id'], 'integer'],
+            [['updated'], 'safe'],
             [['minute0', 'minute1', 'minute2', 'minute3', 'minute4', 'minute5', 'minute6', 'minute7', 'minute8', 'minute9', 'minute10', 'minute11', 'minute12', 'minute13', 'minute14', 'minute15', 'minute16', 'minute17', 'minute18', 'minute19', 'minute20', 'minute21', 'minute22', 'minute23', 'minute24', 'minute25', 'minute26', 'minute27', 'minute28', 'minute29', 'minute30', 'minute31', 'minute32', 'minute33', 'minute34', 'minute35', 'minute36', 'minute37', 'minute38', 'minute39', 'minute40', 'minute41', 'minute42', 'minute43', 'minute44', 'minute45', 'minute46', 'minute47', 'minute48', 'minute49', 'minute50', 'minute51', 'minute52', 'minute53', 'minute54', 'minute55', 'minute56', 'minute57', 'minute58', 'minute59', 
               'hour0', 'hour1', 'hour2', 'hour3', 'hour4', 'hour5', 'hour6', 'hour7', 'hour8', 'hour9', 'hour10', 'hour11', 'hour12', 'hour13', 'hour14', 'hour15', 'hour16', 'hour17', 'hour18', 'hour19', 'hour20', 'hour21', 'hour22', 'hour23', 
               'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7', 'week8', 'week9', 'week10', 'week11', 'week12', 'week13', 'week14', 'week15', 'week16', 'week17', 'week18', 'week19', 'week20', 'week21', 'week22', 'week23', 'week24', 'week25', 'week26', 'week27', 'week28', 'week29', 'week30', 'week31', 'week32', 'week33', 'week34', 'week35', 'week36', 'week37', 'week38', 'week39', 'week40', 'week41', 'week42', 'week43', 'week44', 'week45', 'week46', 'week47', 'week48', 'week49', 'week50', 'week51', 'week52', 'week53',
@@ -85,9 +86,57 @@ class SensorStat extends \yii\db\ActiveRecord
         {
             $this->$minProp = ($this->$minProp + $value) / 2;
         }
+        $this->updated = $datetime->format('Y-m-d H:i:s');
+        
         $this->save();
     }
     
+    private function clearOld($name, $from, $to)
+    {
+        $start = [
+            'hour' => 0,  'day' => 0,  'week' => 1, 'month' => 1,
+        ];
+        $end = [
+            'hour' => 59, 'day' => 23, 'week' => 7, 'month' => 31,
+        ];
+        
+        $prop = $this->$name.$from;
+        $oldVal = $this->$prop;
+        
+        if ($to >= $from)
+        {
+            for ($i = $from + 1; $i < $to; $i++)
+            {
+                $prop = $this->$name.$i;
+                $this->$prop = $oldVal;
+            }
+        }
+        else
+        {
+            for ($i = $to + 1; $i <= $end[$name]; $i++)
+            {
+                $prop = $this->$name.$i;
+                $this->$prop = $oldVal;
+            }
+            for ($i = $start[$name]; $i < $to; $i++)
+            {
+                $prop = $this->$name.$i;
+                $this->$prop = $oldVal;
+            }
+        }
+    }
+    
+    public function getLastValue($name = 'minute')
+    {
+        $prop = $name.$this->$name;
+        return $this->$prop;
+    }
+    
+    public function getSecondsFromLast()
+    {
+        $now = (new \yii\db\Query)->select( new yii\db\Expression('NOW()') )->scalar();
+        return self::getDiffInSeconds($now, $this->updated);
+    }
     /**
      * 
      * @param string $name - name of time (minute/hour/day/week/month)
@@ -96,8 +145,14 @@ class SensorStat extends \yii\db\ActiveRecord
      */
     private function updateByName($name, $current, $datetime)
     {
-        if ( (int) $this->$name !== $current[$name] )
+        $difTime = $current[$name] - (int) $this->$name;
+        
+        if ( $difTime )
         {
+            if ( $difTime > 1)
+            {
+                //$this->clearOld($name, (int) $this->$name, $current[$name]);
+            }
             if ($this->$name === null)
             {
                 $this->$name = $current[$name];
@@ -181,12 +236,12 @@ class SensorStat extends \yii\db\ActiveRecord
      * @param string $created - current time
      * @return array
      */
-    public function getData($name, $created = null)
+    public function getData($name)
     {
         $minY = 9999;
         $maxY = -9999;
 
-        $cutDate = new \DateTime($created);
+        $cutDate = new \DateTime($this->updated);
         
         $monthName = [
             1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 
@@ -288,4 +343,22 @@ class SensorStat extends \yii\db\ActiveRecord
         ];
     }
     
+    private static function getDiffInSeconds( $dateFirst, $dateSecond = null )
+    {
+        //$datetime1 = new DateTime($dateFirst);
+        //$datetime2 = new DateTime($dateSecond);
+        //$interval = $datetime1->diff($datetime2);
+
+        $timeFirst = strtotime($dateFirst);
+        if ($dateSecond)
+        {
+            $timeSecond = strtotime($dateSecond);
+        }
+        else
+        {
+            $timeSecond = time();
+        }
+
+        return ($timeFirst - $timeSecond);
+    }
 }

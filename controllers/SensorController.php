@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Sensor;
 use app\models\SensorSearch;
+use app\models\SensorStat;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -129,5 +130,32 @@ class SensorController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+    
+    public function actionActual()
+    {
+        $sensor_id = Yii::$app->request->post('sensor_id', 0);
+        $device_id = Yii::$app->request->post('device_id', 0);
+        
+        $sensorValues = [];
+        $sensorStats = [];
+        $sensors = [];
+                
+        if ($sensor_id)
+        {
+            $sensorStats[] = SensorStat::find()->where(['sensor_id' => $sensor->id])->one();
+        }
+        else if ($device_id)
+        {
+            $sensorIds = \app\models\DeviceSensor::find()->select('sensor_id')->where(['device_id' => $device_id])->column();
+            $sensorStats = SensorStat::find()->where(['in', 'sensor_id', $sensorIds])->all();
+        }
+        
+        foreach ($sensorStats as $stat)
+        {
+            $sensorValues[] = ['sensor_id' => $stat->sensor_id, 'actuality' => $stat->getSecondsFromLast(), 'value' => $stat->getLastValue()];
+        }
+                
+        echo \yii\helpers\Json::encode($sensorValues);
     }
 }

@@ -10,10 +10,10 @@ $sensor = isset($sensor) ? $sensor : Sensor::findOne(['user_id' => Yii::$app->us
 $grad = round(180 * ($value - $sensor->min_rate) / ($sensor->max_rate - $sensor->min_rate) );
 ?>
 <div class="col-md-3 text-center speedometer" >
-    <h3><?=$sensor->name; ?> (<?=$sensor->unit; ?>) <div class="led "></div></h3>
+    <h3><?=$sensor->name; ?><?=$sensor->unit ? ' ('.$sensor->unit.')' : ''; ?><div class="led "></div></h3>
     
     <div id="sensor_<?=$sensor->id?>" class="gauge-wrapper " 
-         onclick="window.location.href = window.location.pathname + '?r=sensor%2Fview&id=<?=$sensor->id?>';" 
+         onclick="window.location.href = window.location.pathname + 'sensor/view?id=<?=$sensor->id?>';" 
          data-min="<?=$sensor->min_rate?>" data-max="<?=$sensor->max_rate?>" data-grad="<?=$grad;?>">
         
         <div class="gauge four">
