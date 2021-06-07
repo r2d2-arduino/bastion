@@ -48,9 +48,9 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 //'post/<id:\d+>' => 'post/view',
-                'web/<controller:\w+>/<id:\d+>' => '<controller>/view',
-                'web/<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                'web/<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                '<controller:\w+>/<id:\d+>' => 'web/<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => 'web/<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => 'web/<controller>/<action>',
             ],
         ],
     ],
