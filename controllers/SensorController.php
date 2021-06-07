@@ -139,7 +139,6 @@ class SensorController extends Controller
         
         $sensorValues = [];
         $sensorStats = [];
-        $sensors = [];
                 
         if ($sensor_id)
         {
@@ -149,6 +148,10 @@ class SensorController extends Controller
         {
             $sensorIds = \app\models\DeviceSensor::find()->select('sensor_id')->where(['device_id' => $device_id])->column();
             $sensorStats = SensorStat::find()->where(['in', 'sensor_id', $sensorIds])->all();
+        }
+        else
+        {
+            $sensorStats = SensorStat::find()->all();
         }
         
         foreach ($sensorStats as $stat)
