@@ -30,6 +30,7 @@ function getLastSensorsValue(sensor_id = 0, device_id = 0)
                 if (data[i].actuality < 100)
                 {
                     var name = '#sensor_'+data[i].device_id+'_'+data[i].sensor_id;
+                    //console.log(name);
                     min = $(name).data('min');
                     max = $(name).data('max');
                     oldGrad = $(name).data('grad');
