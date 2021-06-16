@@ -39,4 +39,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<?= $this->render('//layouts/_speedometer', ['value' => $model->value, 'sensor_id' => $model->sensor_id]) ?>
+<?= $this->render('//layouts/_speedometer', ['value' => $model->value, 'sensor_id' => $model->sensor_id, 'device_id' => $model->device_id]) ?>

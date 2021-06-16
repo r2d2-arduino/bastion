@@ -52,7 +52,7 @@ $sensors = Sensor::find()->where(['in', 'id', $devSensors])->all();
             $sensorStat = SensorStat::find()->where(['sensor_id' => $sensor->id])->one(); ?>
             <?php if ($sensorStat)
             {
-                echo $this->render('//layouts/_speedometer', ['value' => $sensorStat->getLastValue(), 'sensor' => $sensor]);
+                echo $this->render('//layouts/_speedometer', ['value' => $sensorStat->getLastValue(), 'sensor' => $sensor, 'device_id' => $sensorStat->device_id]);
             } ?>
         <?php endforeach; ?>
     </div>

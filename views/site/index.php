@@ -33,9 +33,9 @@ $types = ['Widgets', 'Sensors', 'Controllers'];
     </div>
     
     <ul class="nav nav-pills main-nav">
-        <li class="nav-item nav-label">
+        <!--li class="nav-item nav-label">
             <span>Home:</span>
-        </li>
+        </li -->
         <li class="nav-item all active">
             <a class="nav-link " aria-current="page" href="#" 
                data-name="home" data-id="0" onclick="return checkNav(this);">All homes</a>
@@ -53,9 +53,9 @@ $types = ['Widgets', 'Sensors', 'Controllers'];
     </ul>
     
     <ul class="nav nav-pills main-nav">
-        <li class="nav-item nav-label">
+        <!--li class="nav-item nav-label">
             <span>Position:</span>
-        </li>
+        </li-->
         <li class="nav-item all active">
             <a class="nav-link " aria-current="page" href="#" 
                data-name="pos" data-id="0" onclick="return checkNav(this);">All positions</a>
@@ -73,9 +73,9 @@ $types = ['Widgets', 'Sensors', 'Controllers'];
     </ul>
     
     <ul class="nav nav-pills main-nav">
-        <li class="nav-item nav-label">
+        <!--li class="nav-item nav-label">
             <span>Device:</span>
-        </li>
+        </li-->
         <li class="nav-item all active">
             <a class="nav-link " aria-current="page" href="#" 
                data-name="dev" data-id="0" onclick="return checkNav(this);">All devices</a>
@@ -89,9 +89,9 @@ $types = ['Widgets', 'Sensors', 'Controllers'];
     </ul>
     
     <ul class="nav nav-pills main-nav">
-        <li class="nav-item nav-label">
+        <!--li class="nav-item nav-label">
             <span>Types:</span>
-        </li>
+        </li-->
         <li class="nav-item all active">
             <a class="nav-link " aria-current="page" href="#" 
                data-name="type" data-id="0" onclick="return checkNav(this);">All types</a>
@@ -108,15 +108,23 @@ $types = ['Widgets', 'Sensors', 'Controllers'];
     
     <label for="checkUpdate" class="checkUpdate"><input type="checkbox" id="checkUpdate" value="1" />Update sensors</label>
     <div class="body-content">
-        <div class="row">
-            <?php foreach ($sensors as $sensor): 
+        
+            <?php /*foreach ($sensors as $sensor): 
                 $sensorStat = SensorStat::find()->where(['sensor_id' => $sensor->id])->one(); ?>
                 <?php if ($sensorStat)
                 {
-                    echo $this->render('//layouts/_speedometer', ['value' => $sensorStat->getLastValue(), 'sensor' => $sensor]);
+                    echo $this->render('//layouts/_speedometer', ['value' => $sensorStat->getLastValue(), 'sensor' => $sensor, 'device_id' => $sensorStat->device_id]);
                 } ?>
-            <?php endforeach; ?>
-        </div>
+            <?php endforeach;*/ ?>
+            <?php foreach ($devices as $device): ?>
+                <div class="row">
+                <?php $sensorStats = SensorStat::find()->where(['device_id' => $device->id])->orderBy('sensor_id asc')->all(); ?>
+                <?php foreach ($sensorStats as $sensorStat): ?>
+                    <?php echo $this->render('//layouts/_speedometer', ['value' => $sensorStat->getLastValue(), 'sensor_id' => $sensorStat->sensor_id, 'device_id' => $sensorStat->device_id]); ?>
+                <?php endforeach; ?> 
+                </div>
+            <?php endforeach; ?>            
+        
     </div>
 </div>
 <script>

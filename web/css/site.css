@@ -263,6 +263,19 @@ label.checkUpdate input
   background-color:#f1c40f;
 }
 
+.four .slice-colors.revert .st.slice-item:nth-child(2) {
+  border-top: 50px #f1c40f solid;
+  border-right: 50px #f1c40f solid;
+  background-color:#E84C3D;
+}
+
+.four .slice-colors.revert .st.slice-item:nth-child(4) {
+  left:50%;
+  border-bottom: 50px #26C5FF solid;
+  border-right: 50px #26C5FF solid;
+  background-color:#1eaa59;
+}
+
 /*.four .slice-colors .st.slice-item:nth-child(2) {
   border-top: 50px #f1c40f solid;
   border-right: 50px #f1c40f solid;
@@ -300,7 +313,7 @@ label.checkUpdate input
 
 .main-nav .nav-item.all
 {
-    width: 140px;
+    width: 120px;
 }
 
 .main-nav .nav-item.nav-label

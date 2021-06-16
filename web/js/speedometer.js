@@ -11,7 +11,7 @@ function getLastSensorsValue(sensor_id = 0, device_id = 0)
     $.ajax({
         type: 'post',
         dataType: 'json',
-        url: 'sensor/actual',
+        url: '/sensor/actual',
         data: { sensor_id: sensor_id, device_id: device_id },
         success: function (data) 
         {
@@ -29,9 +29,10 @@ function getLastSensorsValue(sensor_id = 0, device_id = 0)
             {
                 if (data[i].actuality < 100)
                 {
-                    min = $('#sensor_'+data[i].sensor_id).data('min');
-                    max = $('#sensor_'+data[i].sensor_id).data('max');
-                    oldGrad = $('#sensor_'+data[i].sensor_id).data('grad');
+                    var name = '#sensor_'+data[i].device_id+'_'+data[i].sensor_id;
+                    min = $(name).data('min');
+                    max = $(name).data('max');
+                    oldGrad = $(name).data('grad');
 
                     //console.log(data[i]);
                     value = data[i].value;
@@ -46,10 +47,10 @@ function getLastSensorsValue(sensor_id = 0, device_id = 0)
 
                     newGrad = Math.round(180 * (value - min) / (max - min));
 
-                    $('#sensor_'+data[i].sensor_id).data('grad', newGrad);
-                    $('#sensor_'+data[i].sensor_id +' .number').html(value);
-                    $('#sensor_'+data[i].sensor_id +'').parent().addClass('alive');
-                    animateNeedleRotate(data[i].sensor_id, oldGrad, newGrad);    
+                    $(name).data('grad', newGrad);
+                    $(name +' .number').html(value);
+                    $(name).parent().addClass('alive');
+                    animateNeedleRotate(name, oldGrad, newGrad);    
                 }
             }
         },
@@ -60,9 +61,9 @@ function getLastSensorsValue(sensor_id = 0, device_id = 0)
     });
 }
 
-function animateNeedleRotate(sensor_id, oldGrad, newGrad)
+function animateNeedleRotate(name, oldGrad, newGrad)
 {
-    var $needle = $('#sensor_'+sensor_id +' .needle');
+    var $needle = $(name +' .needle');
     //console.log(oldGrad + '>' + newGrad);
     $({deg: oldGrad}).animate({deg: newGrad}, {
         duration: 1000,

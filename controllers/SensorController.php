@@ -146,8 +146,7 @@ class SensorController extends Controller
         }
         else if ($device_id)
         {
-            $sensorIds = \app\models\DeviceSensor::find()->select('sensor_id')->where(['device_id' => $device_id])->column();
-            $sensorStats = SensorStat::find()->where(['in', 'sensor_id', $sensorIds])->all();
+            $sensorStats = SensorStat::find()->where(['device_id' => $device_id])->all();
         }
         else
         {
@@ -156,7 +155,7 @@ class SensorController extends Controller
         
         foreach ($sensorStats as $stat)
         {
-            $sensorValues[] = ['sensor_id' => $stat->sensor_id, 'actuality' => $stat->getSecondsFromLast(), 'value' => $stat->getLastValue()];
+            $sensorValues[] = ['sensor_id' => $stat->sensor_id, 'davice_id' => $stat->device_id, 'actuality' => $stat->getSecondsFromLast(), 'value' => $stat->getLastValue()];
         }
                 
         echo \yii\helpers\Json::encode($sensorValues);

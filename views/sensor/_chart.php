@@ -7,10 +7,12 @@ use app\models\SensorStat;
 use yii\web\Request;
 
 $period = Yii::$app->request->get('period', 'minute');
+$device_id = Yii::$app->request->get('device_id', null);
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('@web/js/main.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
-$stat = SensorStat::find()->where(['sensor_id' => $model->id])->one();
+$stat = SensorStat::find()->where(['sensor_id' => $model->id, 'device_id' => $device_id])->one();
 
 if ($stat):
     $items = $stat->getData($period);
@@ -81,7 +83,14 @@ window.onload = function ()
 
 function changeChart(name)
 {
-    window.location.href = window.location.href + '&period='+name
+    if (!getParam('period'))
+    {
+        window.location.href = window.location.href + '&period='+name
+    }
+    else
+    {
+        insertParam('period', name);
+    }
 }
 </script>
 <?php endif; ?>
