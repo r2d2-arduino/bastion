@@ -149,7 +149,7 @@ a.desc:after {
 label.checkUpdate
 {
     margin: 20px 5px;
-    float: right;
+    width: 100%;
 }
 label.checkUpdate input
 {
@@ -310,7 +310,7 @@ label.checkUpdate input
 /* MAIN TABS */
 .main-nav .nav-item
 {
-    margin: 5px;
+    margin: 4px 2px;
 }
 
 .main-nav .nav-item.all

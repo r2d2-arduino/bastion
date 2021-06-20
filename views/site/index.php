@@ -95,12 +95,15 @@ $type_id = Yii::$app->request->get('type_id', '0');
         <?php endforeach; ?>
     </ul>
     
-    <label for="checkUpdate" class="checkUpdate"><input type="checkbox" id="checkUpdate" value="1" />Update sensors</label>
+    
         
     <?php endif; ?>
     
     <!-- SENSORS -->
     <div class="body-content container">
+        <div class="col-md-12 col-sm-12 text-right" >
+            <label for="checkUpdate" class="checkUpdate"><input type="checkbox" id="checkUpdate" value="1" />Update sensors</label>
+        </div>
         <?php foreach ($choosedDevices as $device):
             
             $sensorIds = \app\models\DeviceSensor::find()
@@ -111,7 +114,7 @@ $type_id = Yii::$app->request->get('type_id', '0');
             $sensorStats = SensorStat::find()->where(['in', 'sensor_id', $sensorIds])->andWhere(['device_id' => $device->id])->orderBy('sensor_id asc')->all(); 
             
             if (count($sensorStats)): ?>
-            <div class="col-md-12 col-sm-12 text-center speedometer" >
+            <div class="col-md-12 col-sm-12 text-center" >
                 <h2><?php echo $device->name ?></h2>
             </div>
             <div class="row">
