@@ -102,7 +102,7 @@ $type_id = Yii::$app->request->get('type_id', '0');
     <!-- SENSORS -->
     <div class="body-content container">
         <div class="col-md-12 col-sm-12 text-right" >
-            <label for="checkUpdate" class="checkUpdate"><input type="checkbox" id="checkUpdate" value="1" />Update sensors</label>
+            <label for="checkUpdate" class="checkUpdate"><input type="checkbox" id="checkUpdate" value="1" checked />Update sensors</label>
         </div>
         <?php foreach ($choosedDevices as $device):
             
@@ -130,7 +130,18 @@ $type_id = Yii::$app->request->get('type_id', '0');
 </div>
 <script>
 <?php $device_id = count($choosedDevices) === 1 ? $choosedDevices[0]->id : '' ?>
-setInterval(function(){ 
+var _updateCounter = 0;
+setInterval(function(){
+    if ($('#checkUpdate').prop('checked') === true)
+    {
+        _updateCounter++;
+    }
+    
+    if (_updateCounter > 120)
+    {
+        $('#checkUpdate').prop('checked', false);
+        _updateCounter = 0;
+    }
     getLastSensorsValue(<?=$device_id?>);
 }, 5000);
 </script>

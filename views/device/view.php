@@ -58,7 +58,18 @@ $sensors = Sensor::find()->where(['in', 'id', $devSensors])->all();
     </div>
 </div>
 <script>
-setInterval(function(){ 
+var _updateCounter = 0;
+setInterval(function(){
+    if ($('#checkUpdate').prop('checked') === true)
+    {
+        _updateCounter++;
+    }
+    
+    if (_updateCounter > 120)
+    {
+        $('#checkUpdate').prop('checked', false);
+        _updateCounter = 0;
+    }
     getLastSensorsValue(<?=$model->id; ?>);
 }, 5000);
 </script>
