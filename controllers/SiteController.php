@@ -67,11 +67,7 @@ class SiteController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
-        $stat = \app\models\SensorStat::getOne(1, 2);        
-        $stat->updateByDate(32);
-        
-        
+    {       
         $home_id = (int) Yii::$app->request->get('home_id', 0);
         $position_id = (int) Yii::$app->request->get('position_id', 0);
         $device_id = (int) Yii::$app->request->get('device_id', 0);
