@@ -37,7 +37,7 @@ $this->title = Yii::t('app', 'Devices');
                 'value' => function ($data)
                 {
                     $model = Position::findOne(['id' => $data->position_id]);
-                    return $model->name;
+                    return $model ? $model->name : '--deleted--';
                 },
             ],
             'channel',
@@ -46,7 +46,7 @@ $this->title = Yii::t('app', 'Devices');
                 'value' => function ($data)
                 {
                     $model = Connection::findOne(['id' => $data->connection_id]);
-                    return $model->name;
+                    return $model ? $model->name : '--deleted--';
                 },
             ],
             [

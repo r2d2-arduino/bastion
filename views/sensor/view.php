@@ -3,10 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-
-/* @var $this yii\web\View */
-/* @var $model app\models\Sensor */
-
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Sensors'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -41,14 +37,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'unit',
             'min_rate',
             'max_rate',
+            'revert',
         ],
     ])
     ?>
 
 </div>
-<?php $chart = Yii::$app->request->get('chart', '1');
-if ( (int) $chart === 2):
-    echo $this->render('_chart2', ['model' => $model,]);
-else:
-    echo $this->render('_chart', ['model' => $model,]);
-endif;

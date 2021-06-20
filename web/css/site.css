@@ -149,6 +149,7 @@ a.desc:after {
 label.checkUpdate
 {
     margin: 20px 5px;
+    float: right;
 }
 label.checkUpdate input
 {
@@ -296,6 +297,7 @@ label.checkUpdate input
     height: 15px;
     background-image: url(/images/led-red-15.png);
     vertical-align: middle;
+    margin: 0 5px;
 }
 
 .speedometer.alive .led

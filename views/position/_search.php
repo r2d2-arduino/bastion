@@ -26,7 +26,7 @@ foreach ($homes as $home)
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php //= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'name') ?>
     

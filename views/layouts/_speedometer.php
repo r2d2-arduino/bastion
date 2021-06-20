@@ -19,16 +19,15 @@ if ($grad < 0)
     $grad = 0;
 }
 ?>
-<div class="col-md-3 text-center speedometer" >
-    <h3><?=$sensor->name; ?><?=$sensor->unit ? ' ('.$sensor->unit.')' : ''; ?><div class="led "></div></h3>
+<div class="col-md-3 col-sm-6 text-center speedometer" >
+    <h3 onclick="console.log($(this).next()[0].click());"><?=$sensor->name; ?><?=$sensor->unit ? ' ('.$sensor->unit.')' : ''; ?><div class="led "></div></h3>
     
-    <div id="sensor_<?=$device_id.'_'.$sensor->id?>" class="gauge-wrapper " 
-         onclick="window.location.href = window.location.origin + '/sensor/view?id=<?=$sensor->id?>&device_id=<?=$device_id?>';" 
+    <a href="/chart?sensor_id=<?=$sensor->id?>&device_id=<?=$device_id?>" id="sensor_<?=$device_id.'_'.$sensor->id?>" class="gauge-wrapper"          
          data-min="<?=$sensor->min_rate?>" data-max="<?=$sensor->max_rate?>" data-grad="<?=$grad;?>">
         
         <div class="gauge four">
             
-            <div class="slice-colors">
+            <div class="slice-colors <?=(int) $sensor->revert ? 'revert' : '' ?>">
                 <div class="st slice-item"></div>
                 <div class="st slice-item"></div>
                 <div class="st slice-item"></div>
@@ -40,5 +39,5 @@ if ($grad < 0)
                 <div class="number"><?=$value > 100 ? round($value) : (float) $value;?></div>
             </div>    
         </div>
-    </div>
+    </a>
 </div>

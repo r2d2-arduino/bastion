@@ -24,9 +24,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name') ?>
 
-    <?= $form->field($model, 'shortname') ?>
+    <?php //= $form->field($model, 'shortname') ?>
 
-    <?= $form->field($model, 'unit') ?>
+    <?php //= $form->field($model, 'unit') ?>
 
     <?php // echo $form->field($model, 'min_rate') ?>
 

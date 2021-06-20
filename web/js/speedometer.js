@@ -1,5 +1,5 @@
 var _sensorGetCount = 0;
-function getLastSensorsValue(sensor_id = 0, device_id = 0)
+function getLastSensorsValue(device_id = 0)
 {
     if ($('.btn.logout').length === 0 || _sensorGetCount > 1000 || $('#checkUpdate:checked').length === 0)
     {
@@ -12,7 +12,7 @@ function getLastSensorsValue(sensor_id = 0, device_id = 0)
         type: 'post',
         dataType: 'json',
         url: '/sensor/actual',
-        data: { sensor_id: sensor_id, device_id: device_id },
+        data: { device_id: device_id },
         success: function (data) 
         {
             var value = 0;

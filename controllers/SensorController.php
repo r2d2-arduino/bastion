@@ -134,17 +134,12 @@ class SensorController extends Controller
     
     public function actionActual()
     {
-        $sensor_id = Yii::$app->request->post('sensor_id', 0);
         $device_id = Yii::$app->request->post('device_id', 0);
         
         $sensorValues = [];
         $sensorStats = [];
                 
-        if ($sensor_id)
-        {
-            $sensorStats[] = SensorStat::find()->where(['sensor_id' => $sensor->id])->one();
-        }
-        else if ($device_id)
+        if ($device_id)
         {
             $sensorStats = SensorStat::find()->where(['device_id' => $device_id])->all();
         }

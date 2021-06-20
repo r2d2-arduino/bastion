@@ -103,7 +103,6 @@ $dataY = [];
 $minY = 9999;
 $maxY = -9999;
 
-$dataPoints = [];
 if ($items)
 {
     foreach ($items as $item)
@@ -191,6 +190,6 @@ window.onload = function ()
 
 function changeChart(name)
 {
-    window.location.href = window.location.href + '&period='+name
+    window.location.href = window.location.href + '&period='+name;
 }
 </script>

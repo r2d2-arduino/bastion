@@ -21,6 +21,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'min_rate')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'max_rate')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'revert')->checkbox(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

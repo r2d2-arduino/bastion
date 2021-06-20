@@ -59,6 +59,6 @@ $sensors = Sensor::find()->where(['in', 'id', $devSensors])->all();
 </div>
 <script>
 setInterval(function(){ 
-    getLastSensorsValue(0, <?=$model->id; ?>);
+    getLastSensorsValue(<?=$model->id; ?>);
 }, 5000);
 </script>

@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use app\models\Position;
 /**
  * This is the model class for table "home".
  *
@@ -67,5 +67,14 @@ class Home extends \yii\db\ActiveRecord
     public function getHomePositions()
     {
         return $this->hasMany(HomePosition::className(), ['home_id' => 'id']);
+    }
+    
+    /**
+     * Position count of current home
+     * @return type
+     */
+    public function getPositionCount()
+    {
+        return Position::find()->where(['home_id' => $this->id])->count();
     }
 }

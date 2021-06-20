@@ -80,6 +80,10 @@ use app\models\Device;*/
             <?=
             Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                'homeLink' => [
+                    'label' => Yii::$app->name,
+                    'url' => '/',
+                ],
             ])
             ?>
                 <?= Alert::widget() ?>

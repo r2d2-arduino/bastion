@@ -11,8 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        This is the About page. You may modify the following file to customize its content:
+        Bastion - это проект умного дома, внешнего и внутреннего сервера, написанного на Yii2. 
+        Позволяет подключать и мониторить датчики, а также управлять дистанционно устройствами.
     </p>
-
-    <code><?= __FILE__ ?></code>
 </div>

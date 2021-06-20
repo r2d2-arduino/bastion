@@ -35,7 +35,7 @@ $this->title = Yii::t('app', 'Positions');
                 'value' => function ($data)
                 {
                     $model = Home::findOne(['id' => $data->home_id]);
-                    return $model->name;
+                    return $model ? $model->name : '--deleted--';
                 },
             ],
             [

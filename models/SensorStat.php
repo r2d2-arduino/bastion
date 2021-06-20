@@ -100,28 +100,28 @@ class SensorStat extends \yii\db\ActiveRecord
             'hour' => 59, 'day' => 23, 'week' => 7, 'month' => 31,
         ];
         
-        $prop = $this->$name.$from;
+        $prop = $name.$from;
         $oldVal = $this->$prop;
         
         if ($to >= $from)
         {
             for ($i = $from + 1; $i < $to; $i++)
             {
-                $prop = $this->$name.$i;
-                $this->$prop = $oldVal;
+                $prop = $name.$i;
+                $this->$prop = NULL;//$oldVal;
             }
         }
         else
         {
             for ($i = $to + 1; $i <= $end[$name]; $i++)
             {
-                $prop = $this->$name.$i;
+                $prop = $name.$i;
                 $this->$prop = $oldVal;
             }
             for ($i = $start[$name]; $i < $to; $i++)
             {
-                $prop = $this->$name.$i;
-                $this->$prop = $oldVal;
+                $prop = $name.$i;
+                $this->$prop = NULL;//$oldVal;
             }
         }
     }
@@ -146,12 +146,13 @@ class SensorStat extends \yii\db\ActiveRecord
     private function updateByName($name, $current, $datetime)
     {
         $difTime = $current[$name] - (int) $this->$name;
-        
+        //var_dump($name.'='.$difTime);
         if ( $difTime )
         {
             if ( $difTime > 1)
             {
-                //$this->clearOld($name, (int) $this->$name, $current[$name]);
+                //clear old data
+                $this->clearOld($name, (int) $this->$name, $current[$name]);
             }
             if ($this->$name === null)
             {

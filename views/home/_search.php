@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="home-search">
+<div class="home-search  search-block">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -18,9 +18,9 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php //= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'user_id') ?>
+    <?php //= $form->field($model, 'user_id') ?>
 
     <?= $form->field($model, 'name') ?>
 

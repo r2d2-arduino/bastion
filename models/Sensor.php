@@ -39,7 +39,7 @@ class Sensor extends \yii\db\ActiveRecord
             [['user_id'], 'integer'],
             [['created'], 'safe'],
             [['name', 'shortname'], 'required'],
-            [['min_rate', 'max_rate'], 'number'],
+            [['min_rate', 'max_rate', 'revert'], 'number'],
             [['name'], 'string', 'max' => 16],
             [['shortname', 'unit'], 'string', 'max' => 8],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -60,6 +60,7 @@ class Sensor extends \yii\db\ActiveRecord
             'unit' => Yii::t('app', 'Unit'),
             'min_rate' => Yii::t('app', 'Min Rate'),
             'max_rate' => Yii::t('app', 'Max Rate'),
+            'revert' => Yii::t('app', 'Revert'),
         ];
     }
 

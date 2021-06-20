@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\Device;
 
 /**
  * This is the model class for table "position".
@@ -81,5 +82,14 @@ class Position extends \yii\db\ActiveRecord
     public function getHomePositions()
     {
         return $this->hasMany(HomePosition::className(), ['position_id' => 'id']);
+    }
+    
+     /**
+     * Device count of current home
+     * @return type
+     */
+    public function getDeviceCount()
+    {
+        return Device::find()->where(['position_id' => $this->id])->count();
     }
 }

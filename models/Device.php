@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\DeviceSensor;
 
 /**
  * This is the model class for table "device".
@@ -115,5 +116,15 @@ class Device extends \yii\db\ActiveRecord
     public function getSensorValues()
     {
         return $this->hasMany(SensorValue::className(), ['device_id' => 'id']);
+    }
+    
+     /**
+     * Device count of current home
+     * @return type
+     */
+    public function getSubitemCount()
+    {
+        $sCnt = DeviceSensor::find()->where(['device_id' => $this->id])->count();
+        return $sCnt;
     }
 }

@@ -7,6 +7,27 @@ function checkNav(obj)
     var id = $(obj).data('id');
     
     console.log(name + ':' + id);
+    //changeParam(name, id);
+    
+    if (name === 'home_id')
+    {
+        window.location.href = window.location.origin + '?home_id=' + id;
+    }
+    if (name === 'position_id')
+    {
+        let home_id = getParam('home_id');
+        window.location.href = window.location.origin + '?home_id=' + home_id + '&position_id=' + id;
+    }
+    if (name === 'device_id')
+    {
+        let home_id = getParam('home_id');
+        let position_id = getParam('position_id');
+        window.location.href = window.location.origin + '?home_id=' + home_id + '&position_id=' + position_id + '&device_id=' + id;
+    }
+    if (name === 'type_id')
+    {
+        changeParam(name, id);
+    }
     
     return false;
 }
@@ -33,4 +54,22 @@ function insertParam(key, value)
 
     //again, do what you will here
     document.location.search = s;
+}
+
+function changeParam(key, value)
+{
+    if (!getParam(key))
+    {
+        let amp  = '?';
+        
+        if (window.location.href.indexOf('?') > -1)
+        {
+            amp = '&';
+        }
+        window.location.href = window.location.href + amp + key + '=' + value
+    }
+    else
+    {
+        insertParam(key, value);
+    }
 }
