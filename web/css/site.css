@@ -310,12 +310,12 @@ label.checkUpdate input
 /* MAIN TABS */
 .main-nav .nav-item
 {
-    margin: 4px 2px;
+    margin: 4px 0px;
 }
 
 .main-nav .nav-item.all
 {
-    width: 120px;
+    /*width: 120px;*/
 }
 
 .main-nav .nav-item.nav-label
