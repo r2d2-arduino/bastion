@@ -149,7 +149,7 @@ class SensorStat extends \yii\db\ActiveRecord
         //var_dump($name.'='.$difTime);
         if ( $difTime )
         {
-            if ( $difTime > 1)
+            if ( $difTime > 1 && $this->updated !== null)
             {
                 //clear old data
                 $this->clearOld($name, (int) $this->$name, $current[$name]);
