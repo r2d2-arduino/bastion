@@ -64,7 +64,7 @@ class SensorStat extends \yii\db\ActiveRecord
         $datetime = new \DateTime($created);
         $prevMonth = $datetime;
         $prevMonth->modify('-1 month');
-
+        
         $current = [
             'minute'=> (int) $datetime->format('i'),
             'hour'  => (int) $datetime->format('H'),
@@ -72,6 +72,7 @@ class SensorStat extends \yii\db\ActiveRecord
             'week'  => (int) $datetime->format('W'),
             'month' => (int) $datetime->format('m'),
             't'     => (int) $prevMonth->format('t'),
+            'created' => $created,
         ];        
        
         $this->updateByName('month', $current);
@@ -202,11 +203,12 @@ class SensorStat extends \yii\db\ActiveRecord
         ];
         $end = [
             'hour' => 59, 'day' => 23, 'week' => 7, 'month' => $current['t'],
-        ];
-        
+        ];   
         $lower = [
             'hour' => 'minute', 'day' => 'hour', 'week' => 'day', 'month' => 'day',
         ];
+        
+        $datetime = new \DateTime($current['created']);
                 
         $sum = 0;
         $amount = $end[$name] - $start[$name] + 1;
