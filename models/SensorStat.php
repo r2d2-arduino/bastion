@@ -79,6 +79,8 @@ class SensorStat extends \yii\db\ActiveRecord
         $minProp = 'minute'.$current['minute'];
         if ( (int) $this->minute != $current['minute'] )
         {
+            $this->clearOld('minute', (int) $this->minute, $current['minute']);
+            
             $this->$minProp = $value;
             $this->minute = $current['minute'];
         }    
