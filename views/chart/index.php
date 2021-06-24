@@ -9,20 +9,25 @@ use yii\helpers\Html;
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 $this->registerJsFile('@web/js/main.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
-$this->title = $sensor->name;
+$this->title = $sensor->name.' - statistic';
 $this->params['breadcrumbs'][] = $this->title;
+
+$periods = ['minute' => 'Minutly', 'hour' => 'Hourly', 'day' => 'Dayly', 'week' => 'Weekly', 'month' => 'Monthly'];
 
 if ($items):
 ?>
 <div class="chart-index">
     <h1><?= Html::encode($this->title) ?></h1>
-    <select class="form-control" aria-label="Choose period..." onchange="changeParam('period', $(this).val())" >
-        <option value="minute" <?=$period==='minute' ? 'selected' : ''?> >Minutly</option>
-        <option value="hour" <?=$period==='hour' ? 'selected' : ''?> >Hourly</option>
-        <option value="day" <?=$period==='day' ? 'selected' : ''?> >Dayly</option>
-        <option value="week" <?=$period==='week' ? 'selected' : ''?> >Weekly</option>
-        <option value="month" <?=$period==='month' ? 'selected' : ''?> >Monthly</option>
-    </select>
+    
+    <ul class="nav nav-pills main-nav">      
+        <?php foreach ($periods as $value => $name): ?>
+            <li class="nav-item <?=$period === $value ? 'active' : ''?>">
+                <a class="nav-link " aria-current="page" href="#" 
+                   onclick="return changeParam('period', '<?=$value?>');"><?=$name?></a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+
     <br>
 
     <canvas id="myChart"></canvas>
@@ -82,3 +87,5 @@ window.onload = function ()
 }
 </script>
 <?php endif; ?>
+<br>
+<a href="/chart/alt?sensor_id=<?=$sensor->id?>&device_id=<?=$device_id?>">Original data</a>

@@ -72,4 +72,5 @@ function changeParam(key, value)
     {
         insertParam(key, value);
     }
+    return false;
 }

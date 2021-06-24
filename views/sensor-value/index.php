@@ -38,7 +38,7 @@ $this->title = Yii::t('app', 'Sensor Values');
                 'value' => function ($data)
                 {
                     $model = Sensor::find()->select(['name'])->where(['id' => $data->sensor_id])->one();
-                    return $model->name;
+                    return $model ? $model->name : '-- deleted --';
                 },
             ],
             [
@@ -46,7 +46,7 @@ $this->title = Yii::t('app', 'Sensor Values');
                 'value' => function ($data)
                 {
                     $model = Device::find()->select(['name'])->where(['id' => $data->device_id])->one();
-                    return $model->name;
+                    return $model ? $model->name : '-- deleted --';
                 },
             ],
             'value',

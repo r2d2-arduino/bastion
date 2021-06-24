@@ -1,7 +1,14 @@
 <?php
+use yii\web\Request;
+use yii\helpers\Html;
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+
+$this->title = $sensor->name.' - original';
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
+<h1><?= Html::encode($this->title) ?></h1>
 <select class="form-control" aria-label="Choose period..." onchange="changeParam('period', $(this).val())" >
     <option value="minute" <?=$period==='minute' ? 'selected' : ''?> >Minutly</option>
     <option value="hour" <?=$period==='hour' ? 'selected' : ''?> >Hourly</option>
@@ -66,4 +73,5 @@ window.onload = function ()
     myChart = new Chart( document.getElementById('myChart'), config );
 };
 </script>
-
+<br>
+<a href="/chart?sensor_id=<?=$sensor->id?>&device_id=<?=$device_id?>">Statistic data</a>

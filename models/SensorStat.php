@@ -245,7 +245,7 @@ class SensorStat extends \yii\db\ActiveRecord
         $maxY = -9999;
 
         $cutDate = new \DateTime($this->updated);
-        
+
         $monthName = [
             1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 
             7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec'
@@ -291,58 +291,66 @@ class SensorStat extends \yii\db\ActiveRecord
         for ($i = $start[$name]; $i <= $end[$name]; $i++)
         {
             $attr = $name.$i;
-            if ($this->$attr)
+
+            $itemsRaw[] = $this->$attr;
+
+            $label = $i;
+
+            if ($name === 'minute')
             {
-                $itemsRaw[] = $this->$attr;
-                
-                $label = $i;
-                                
-                if ($name === 'minute')
-                {
-                    $label = $i < 10 ? '0'.$i : ''.$i;
-                    $label = $i > $current[$name] ? $previos[$upper[$name]].':'.$label : $current[$upper[$name]].':'.$label;
-                }    
-                if ($name === 'hour')
-                {
-                    $label = $i > $current[$name] ? $label.':00' : $label.':00';
-                }
-                if ($name === 'day')
-                {
-                    $month = $i > $current[$name] ? $monthName[$previos[$upper[$name]]] : $monthName[$current[$upper[$name]]];
-                    $label = $month.' '.$label;
-                }
-                if ($name === 'month')
-                {
-                    $label = $monthName[$label];
-                }
-                
-                $labelsRaw[] = $label;
-                
-                $minY = (float) $this->$attr < $minY ? (float) $this->$attr : $minY;
-                $maxY = (float) $this->$attr > $maxY ? (float) $this->$attr : $maxY;
+                $label = $i < 10 ? '0'.$i : ''.$i;
+                $label = $i > $current[$name] ? $previos[$upper[$name]].':'.$label : $current[$upper[$name]].':'.$label;
+            }    
+            if ($name === 'hour')
+            {
+                $label = $i > $current[$name] ? $label.':00' : $label.':00';
+            }
+            if ($name === 'day')
+            {
+                $month = $i > $current[$name] ? $monthName[$previos[$upper[$name]]] : $monthName[$current[$upper[$name]]];
+                $label = $month.' '.$label;
+            }
+            if ($name === 'month')
+            {
+                $label = $monthName[$label];
+            }
+
+            $labelsRaw[] = $label;
+
+            $minY = (float) $this->$attr < $minY ? (float) $this->$attr : $minY;
+            $maxY = (float) $this->$attr > $maxY ? (float) $this->$attr : $maxY;
+        }
+      
+        $len = $current[$name] + 1 - $start[$name];
+         
+        $items1 = $items2 = $itemsRaw;
+        array_splice($items1, $len );        
+        array_splice($items2, 0, $len );
+
+        $items = array_merge($items2, $items1);
+
+        $labels1 = $labels2 = $labelsRaw;
+        array_splice($labels1, $len );        
+        array_splice($labels2, 0, $len );
+
+        $labels = array_merge($labels2, $labels1);
+
+        $items2 = [];
+        $labels2 = [];
+        foreach ($items as $num => $item)
+        {
+            if ($item !== null)
+            {
+                $labels2[] = $labels[$num];
+                $items2[] = $items[$num];
             }
         }
-        
-            $len = $current[$name] + 1 - $start[$name];
-                    
-            $items1 = $items2 = $itemsRaw;
-            array_splice($items1, $len );        
-            array_splice($items2, 0, $len );
-
-            $items = array_merge($items2, $items1);
-
-
-            $labels1 = $labels2 = $labelsRaw;
-            array_splice($labels1, $len );        
-            array_splice($labels2, 0, $len );
-
-            $labels = array_merge($labels2, $labels1);
 
         $lowY = $minY + $maxY > 200 ? floor($minY/10) * 10 : floor($minY);
         $hiY =  $minY + $maxY > 200 ? ceil($maxY/10) * 10  : ceil($maxY);
         
         return [
-            'x' => $labels, 'y' => $items, 'lowY' => $lowY, 'hiY' => $hiY
+            'x' => $labels2, 'y' => $items2, 'lowY' => $lowY, 'hiY' => $hiY
         ];
     }
     

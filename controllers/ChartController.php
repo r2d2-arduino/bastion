@@ -40,6 +40,7 @@ class ChartController extends Controller
             'items' => $items,
             'period' => $period,
             'sensor' => $sensor,
+            'device_id' => $device_id,
         ]);
     }
     
@@ -173,6 +174,7 @@ class ChartController extends Controller
             'items' => $items,
             'period' => $period,
             'sensor' => $sensor,
+            'device_id' => $device_id,
             'dataX' => $dataX,
             'dataY' => $dataY,
             'lowY' => $lowY,
