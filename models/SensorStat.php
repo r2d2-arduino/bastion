@@ -316,9 +316,12 @@ class SensorStat extends \yii\db\ActiveRecord
             }
 
             $labelsRaw[] = $label;
-
-            $minY = (float) $this->$attr < $minY ? (float) $this->$attr : $minY;
-            $maxY = (float) $this->$attr > $maxY ? (float) $this->$attr : $maxY;
+            
+            if ($this->$attr !== null)
+            {
+                $minY = (float) $this->$attr < $minY ? (float) $this->$attr : $minY;
+                $maxY = (float) $this->$attr > $maxY ? (float) $this->$attr : $maxY;
+            }
         }
       
         $len = $current[$name] + 1 - $start[$name];
