@@ -62,13 +62,16 @@ class SensorStat extends \yii\db\ActiveRecord
     {
         $created = (new \yii\db\Query)->select( new yii\db\Expression('NOW()') )->scalar();
         $datetime = new \DateTime($created);
-        
+        $prevMonth = $datetime;
+        $prevMonth->modify('-1 month');
+
         $current = [
             'minute'=> (int) $datetime->format('i'),
             'hour'  => (int) $datetime->format('H'),
             'day'   => (int) $datetime->format('d'),
             'week'  => (int) $datetime->format('W'),
             'month' => (int) $datetime->format('m'),
+            't'     => (int) $prevMonth->format('t'),
         ];        
        
         $this->updateByName('month', $current, $datetime);
@@ -79,7 +82,7 @@ class SensorStat extends \yii\db\ActiveRecord
         $minProp = 'minute'.$current['minute'];
         if ( (int) $this->minute != $current['minute'] )
         {
-            $this->clearOld('minute', (int) $this->minute, $current['minute']);
+            $this->clearOld('minute', (int) $this->minute, $current['minute'], $current['t']);
             
             $this->$minProp = $value;
             $this->minute = $current['minute'];
@@ -92,16 +95,16 @@ class SensorStat extends \yii\db\ActiveRecord
         
         $this->save();
     }
-    
-    private function clearOld($name, $from, $to)
+                                    //59     34
+    private function clearOld($name, $from, $to, $current = null)
     {
         $start = [
-            'hour' => 0,  'day' => 0,  'week' => 1, 'month' => 1,
-        ];
+            'minute' => 0, 'hour' => 0, 'day' => 1, 'week' => 1, 'month' => 1,
+        ];        
         $end = [
-            'hour' => 59, 'day' => 23, 'week' => 7, 'month' => 31,
+            'minute' => 59, 'hour' => 23, 'day' => $current['t'], 'week' => 53, 'month' => 12,
         ];
-        
+                
         $prop = $name.$from;
         $oldVal = $this->$prop;
         
@@ -154,14 +157,14 @@ class SensorStat extends \yii\db\ActiveRecord
             if ( $difTime > 1 && $this->updated !== null)
             {
                 //clear old data
-                $this->clearOld($name, (int) $this->$name, $current[$name]);
+                $this->clearOld($name, (int) $this->$name, $current[$name], $current);
             }
             if ($this->$name === null)
             {
                 $this->$name = $current[$name];
             }
             
-            $this->setAvg($name, $datetime);            
+            $this->setAvg($name, $current);            
             $this->$name = $current[$name];
         }
         else
@@ -192,15 +195,14 @@ class SensorStat extends \yii\db\ActiveRecord
      * @param string $name - name of time (minute/hour/day/week/month)
      * @param DateTime $datetime - current datetime
      */
-    private function setAvg($name, $datetime)
+    private function setAvg($name, $current)
     {
         $start = [
             'hour' => 0,  'day' => 0,  'week' => 1, 'month' => 1,
         ];
         $end = [
-            'hour' => 59, 'day' => 23, 'week' => 7, 'month' => 31,
+            'hour' => 59, 'day' => 23, 'week' => 7, 'month' => $current['t'],
         ];
-        $end['month']  = (int) $datetime->format('t');
         
         $lower = [
             'hour' => 'minute', 'day' => 'hour', 'week' => 'day', 'month' => 'day',
