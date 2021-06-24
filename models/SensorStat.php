@@ -74,10 +74,10 @@ class SensorStat extends \yii\db\ActiveRecord
             't'     => (int) $prevMonth->format('t'),
         ];        
        
-        $this->updateByName('month', $current, $datetime);
-        $this->updateByName('week',  $current, $datetime); 
-        $this->updateByName('day',   $current, $datetime);        
-        $this->updateByName('hour',  $current, $datetime); 
+        $this->updateByName('month', $current);
+        $this->updateByName('week',  $current); 
+        $this->updateByName('day',   $current);        
+        $this->updateByName('hour',  $current); 
         
         $minProp = 'minute'.$current['minute'];
         if ( (int) $this->minute != $current['minute'] )
@@ -148,7 +148,7 @@ class SensorStat extends \yii\db\ActiveRecord
      * @param array $current - current time parts in integers
      * @param DateTime $datetime - current datetime
      */
-    private function updateByName($name, $current, $datetime)
+    private function updateByName($name, $current)
     {
         $difTime = $current[$name] - (int) $this->$name;
         //var_dump($name.'='.$difTime);
