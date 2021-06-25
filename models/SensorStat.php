@@ -62,7 +62,7 @@ class SensorStat extends \yii\db\ActiveRecord
     {
         $created = (new \yii\db\Query)->select( new yii\db\Expression('NOW()') )->scalar();
         $datetime = new \DateTime($created);
-        $prevMonth = $datetime;
+        $prevMonth = new \DateTime($created);
         $prevMonth->modify('-1 month');
         
         $current = [
@@ -353,10 +353,6 @@ class SensorStat extends \yii\db\ActiveRecord
     
     private static function getDiffInSeconds( $dateFirst, $dateSecond = null )
     {
-        //$datetime1 = new DateTime($dateFirst);
-        //$datetime2 = new DateTime($dateSecond);
-        //$interval = $datetime1->diff($datetime2);
-
         $timeFirst = strtotime($dateFirst);
         if ($dateSecond)
         {
