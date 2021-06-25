@@ -81,33 +81,33 @@ class SensorStat extends \yii\db\ActiveRecord
         $this->updateByName('hour',  $current); 
         
         $minProp = 'minute'.$current['minute'];
-        if ( (int) $this->minute != $current['minute'] )
+        if ( (int) $this->minute === $current['minute'] )
         {
-            $this->clearOld('minute', (int) $this->minute, $current['minute'], $current['t']);
-            
-            $this->$minProp = $value;
-            $this->minute = $current['minute'];
+            $this->$minProp = ($this->$minProp + $value) / 2;
         }    
         else
         {
-            $this->$minProp = ($this->$minProp + $value) / 2;
+            $this->clearOld('minute', (int) $this->minute, $current['minute']);
+            
+            $this->$minProp = $value;
+            $this->minute = $current['minute'];
         }
         $this->updated = $datetime->format('Y-m-d H:i:s');
         
         $this->save();
     }
                                     //59     34
-    private function clearOld($name, $from, $to, $current = null)
+    private function clearOld($name, $from, $to, $currentT = null)
     {
         $start = [
             'minute' => 0, 'hour' => 0, 'day' => 1, 'week' => 1, 'month' => 1,
         ];        
         $end = [
-            'minute' => 59, 'hour' => 23, 'day' => $current['t'], 'week' => 53, 'month' => 12,
+            'minute' => 59, 'hour' => 23, 'day' => $currentT, 'week' => 53, 'month' => 12,
         ];
                 
-        $prop = $name.$from;
-        $oldVal = $this->$prop;
+        //$prop = $name.$from;
+        //$oldVal = $this->$prop;
         
         if ($to >= $from)
         {
@@ -122,7 +122,7 @@ class SensorStat extends \yii\db\ActiveRecord
             for ($i = $to + 1; $i <= $end[$name]; $i++)
             {
                 $prop = $name.$i;
-                $this->$prop = $oldVal;
+                $this->$prop = NULL;//$oldVal;
             }
             for ($i = $start[$name]; $i < $to; $i++)
             {

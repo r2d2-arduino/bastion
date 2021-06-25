@@ -20,7 +20,7 @@ if ($grad < 0)
 }
 ?>
 <div class="col-md-3 col-sm-6 text-center speedometer" >
-    <h3 onclick="console.log($(this).next()[0].click());"><?=$sensor->name; ?><?=$sensor->unit ? ' ('.$sensor->unit.')' : ''; ?><div class="led "></div></h3>
+    <h3 onclick="console.log($(this).next()[0].click());"><?=$sensor->shortname; ?><?=$sensor->unit ? ' ('.$sensor->unit.')' : ''; ?><div class="led "></div></h3>
     
     <a href="/chart?sensor_id=<?=$sensor->id?>&device_id=<?=$device_id?>" id="sensor_<?=$device_id.'_'.$sensor->id?>" class="gauge-wrapper"          
          data-min="<?=$sensor->min_rate?>" data-max="<?=$sensor->max_rate?>" data-grad="<?=$grad;?>">
