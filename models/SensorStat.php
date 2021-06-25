@@ -96,38 +96,31 @@ class SensorStat extends \yii\db\ActiveRecord
         
         $this->save();
     }
-                                    //59     34
+
     private function clearOld($name, $from, $to, $currentT = null)
     {
-        $start = [
-            'minute' => 0, 'hour' => 0, 'day' => 1, 'week' => 1, 'month' => 1,
-        ];        
-        $end = [
-            'minute' => 59, 'hour' => 23, 'day' => $currentT, 'week' => 53, 'month' => 12,
-        ];
-                
-        //$prop = $name.$from;
-        //$oldVal = $this->$prop;
-        
         if ($to >= $from)
         {
             for ($i = $from + 1; $i < $to; $i++)
             {
                 $prop = $name.$i;
-                $this->$prop = NULL;//$oldVal;
+                $this->$prop = NULL;
             }
         }
-        else
+        else // to < from
         {
-            for ($i = $to + 1; $i <= $end[$name]; $i++)
+            $start  = [ 'minute' => 0,  'hour' => 0,  'day' => 1,         'week' => 1,  'month' => 1 ];        
+            $end    = [ 'minute' => 59, 'hour' => 23, 'day' => $currentT, 'week' => 53, 'month' => 12 ];
+        
+            for ($i = $from + 1; $i <= $end[$name]; $i++)// 60..59 / 5
             {
                 $prop = $name.$i;
-                $this->$prop = NULL;//$oldVal;
+                $this->$prop = NULL;
             }
-            for ($i = $start[$name]; $i < $to; $i++)
+            for ($i = $start[$name]; $i < $to; $i++)//0..33
             {
                 $prop = $name.$i;
-                $this->$prop = NULL;//$oldVal;
+                $this->$prop = NULL;
             }
         }
     }
