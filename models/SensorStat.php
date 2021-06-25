@@ -103,8 +103,7 @@ class SensorStat extends \yii\db\ActiveRecord
         {
             for ($i = $from + 1; $i < $to; $i++)
             {
-                $prop = $name.$i;
-                $this->$prop = NULL;
+                $this->{$name.$i} = NULL;
             }
         }
         else // to < from
@@ -114,13 +113,11 @@ class SensorStat extends \yii\db\ActiveRecord
         
             for ($i = $from + 1; $i <= $end[$name]; $i++)// 60..59 / 5
             {
-                $prop = $name.$i;
-                $this->$prop = NULL;
+                $this->{$name.$i} = NULL;
             }
             for ($i = $start[$name]; $i < $to; $i++)//0..33
             {
-                $prop = $name.$i;
-                $this->$prop = NULL;
+                $this->{$name.$i} = NULL;
             }
         }
     }
