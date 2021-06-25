@@ -3,6 +3,7 @@ use yii\web\Request;
 use yii\helpers\Html;
 
 $this->registerJsFile('@web/js/chart.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('@web/js/main.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 
 $this->title = $sensor->name;
 $this->params['breadcrumbs'][] = $this->title;
