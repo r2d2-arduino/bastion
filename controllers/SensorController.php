@@ -150,7 +150,11 @@ class SensorController extends Controller
         
         foreach ($sensorStats as $stat)
         {
-            $sensorValues[] = ['sensor_id' => $stat->sensor_id, 'device_id' => $stat->device_id, 'actuality' => $stat->getSecondsFromLast(), 'value' => $stat->getLastValue()];
+            $sensorValues[] = [
+                'sensor_id' => $stat->sensor_id, 
+                'device_id' => $stat->device_id, 
+                'actuality' => $stat->getSecondsFromLast(), 
+                'value' => $stat->getLastValue()];
         }
                 
         echo \yii\helpers\Json::encode($sensorValues);
