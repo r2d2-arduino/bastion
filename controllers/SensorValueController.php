@@ -87,9 +87,9 @@ var_dump(Yii::$app->request->post()); exit;
         
         $model = new SensorValue();
         $model->created = date('Y:m:d H:i:s');
-        $model->device_id = 6;
-        $model->sensor_id = 11;
-        $model->value = 853;
+        $model->device_id = $device_id;
+        $model->sensor_id = $sensor_id;
+        $model->value = $value;
         $res = $model->save();
         print($res ? 'ok' : 'error');
     }
