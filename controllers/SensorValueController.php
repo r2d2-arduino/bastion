@@ -69,7 +69,7 @@ class SensorValueController extends Controller
     public function actionCreate()
     {
         $model = new SensorValue();
-
+var_dump(Yii::$app->request->post()); exit;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -77,6 +77,21 @@ class SensorValueController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+    
+    public function actionAdd()
+    {
+        $sensor_id  = Yii::$app->request->post('sensor_id', 0);
+        $device_id  = Yii::$app->request->post('device_id', 0);
+        $value      = Yii::$app->request->post('value', 0);
+        
+        $model = new SensorValue();
+        $model->created = date('Y:m:d H:i:s');
+        $model->device_id = 6;
+        $model->sensor_id = 11;
+        $model->value = 853;
+        $res = $model->save();
+        print($res ? 'ok' : 'error');
     }
 
     /**

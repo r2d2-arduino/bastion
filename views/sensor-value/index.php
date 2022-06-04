@@ -18,9 +18,9 @@ $this->title = Yii::t('app', 'Sensor Values');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <!-- div  class="btn-add-block" >
+    <div  class="btn-add-block" >
     <?= Html::a(Yii::t('app', 'Create Sensor Value'), ['create'], ['class' => 'btn btn-success']) ?>
-    </div -->
+    </div>
 
     <?php Pjax::begin(); ?>
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>

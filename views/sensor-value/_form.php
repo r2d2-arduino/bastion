@@ -12,8 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'created')->textInput() ?>
-
     <?= $form->field($model, 'sensor_id')->textInput() ?>
 
     <?= $form->field($model, 'device_id')->textInput() ?>
