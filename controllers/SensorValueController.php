@@ -91,7 +91,7 @@ var_dump(Yii::$app->request->post()); exit;
         $model->sensor_id = $sensor_id;
         $model->value = $value;
         $res = $model->save();
-        print($res ? 'ok' : 'error');
+        echo \yii\helpers\Json::encode($res ? 'ok' : 'error');
     }
 
     /**
