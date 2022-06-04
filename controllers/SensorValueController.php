@@ -94,18 +94,19 @@ class SensorValueController extends Controller
         $sensor_id  = Yii::$app->request->post('sensor_id', 0);
         $device_id  = Yii::$app->request->post('device_id', 0);
         $value      = Yii::$app->request->post('value', 0);
-//var_dump($_POST);
-
-//var_dump(['sensor_id' => $sensor_id, 'device_id' => $device_id, 'value' => $value]);
-
-        $model = new SensorValue();
-        $model->created = date('Y:m:d H:i:s');
-        $model->device_id = $device_id;
-        $model->sensor_id = $sensor_id;
-        $model->value = $value;
-        $res = $model->save();
-
-        echo $res ? 'ok' : 'error';
+        
+        $id = SensorValue::add($device_id, $sensor_id, $value);
+        
+        if ($id)
+        {
+            $stat = SensorStat::getOne($device_id, $sensor_id);        
+            $stat->updateByDate($value);
+            echo $id;
+        }
+        else
+        {
+            echo 'error';
+        }        
     }
 
 
