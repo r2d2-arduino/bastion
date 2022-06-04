@@ -18,6 +18,16 @@ use yii\filters\VerbFilter;
  */
 class SensorValueController extends Controller
 {
+    
+    public function beforeAction($action)
+    {
+        if ($action->id == 'additem') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -69,7 +79,7 @@ class SensorValueController extends Controller
     public function actionCreate()
     {
         $model = new SensorValue();
-var_dump(Yii::$app->request->post()); exit;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -79,20 +89,25 @@ var_dump(Yii::$app->request->post()); exit;
         ]);
     }
     
-    public function actionAdd()
+    public function actionAdditem()
     {
         $sensor_id  = Yii::$app->request->post('sensor_id', 0);
         $device_id  = Yii::$app->request->post('device_id', 0);
         $value      = Yii::$app->request->post('value', 0);
-        
+//var_dump($_POST);
+
+//var_dump(['sensor_id' => $sensor_id, 'device_id' => $device_id, 'value' => $value]);
+
         $model = new SensorValue();
         $model->created = date('Y:m:d H:i:s');
         $model->device_id = $device_id;
         $model->sensor_id = $sensor_id;
         $model->value = $value;
         $res = $model->save();
-        echo \yii\helpers\Json::encode($res ? 'ok' : 'error');
+
+        echo $res ? 'ok' : 'error';
     }
+
 
     /**
      * Updates an existing SensorValue model.
